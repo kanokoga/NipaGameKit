@@ -7,7 +7,7 @@ using UnityEngine.Serialization;
 
 namespace NipaGameKit
 {
-    public class Mono : MonoBehaviour
+    public class NipaMono : MonoBehaviour
     {
         private static int GlobalMonoId = 0;
         public int MonoId { get; private set; }

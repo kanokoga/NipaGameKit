@@ -15,18 +15,18 @@ namespace NipaGameKit
         private static List<int> _ActiveMonoIds = new List<int>();
 
 
-        public void SetMonoActive(Mono mono)
+        public void SetMonoActive(NipaMono nipaMono)
         {
-            OnMonoIsPreReady.Invoke(mono.MonoId);
-            mono.gameObject.SetActive(true);
-            OnMonoIsReady.Invoke(mono.MonoId);
-            _ActiveMonoIds.Add(mono.MonoId);
+            OnMonoIsPreReady.Invoke(nipaMono.MonoId);
+            nipaMono.gameObject.SetActive(true);
+            OnMonoIsReady.Invoke(nipaMono.MonoId);
+            _ActiveMonoIds.Add(nipaMono.MonoId);
         }
 
-        public void SetMonoDead(Mono mono)
+        public void SetMonoDead(NipaMono nipaMono)
         {
-            _ActiveMonoIds.Remove(mono.MonoId);
-            OnMonoIsDying.Invoke(mono.MonoId);
+            _ActiveMonoIds.Remove(nipaMono.MonoId);
+            OnMonoIsDying.Invoke(nipaMono.MonoId);
         }
 
         private void OnDestroy()

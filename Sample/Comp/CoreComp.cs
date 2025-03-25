@@ -7,6 +7,7 @@ namespace NipaGameKit
     {
         public virtual Faction Faction => this.faction;
         public virtual float MaxHitpoint => this.maxHitpoint;
+        public virtual float Hitpoint => this.hitpoint;
         public virtual Vector3 Position => this._transform.position;
         public virtual Quaternion Rotation => this._transform.rotation;
         public override int InitOrder { get; } = -100;
