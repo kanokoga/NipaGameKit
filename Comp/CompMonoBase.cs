@@ -9,13 +9,17 @@ namespace NipaGameKit
 {
     public abstract class CompMonoBase : MonoBehaviour, ICompGroupElement
     {
+        public Vector3 Position => this._transform.position;
+        public Quaternion Rotation => this._transform.rotation;
         public int MonoId { get; private set; }
         public bool IsActive { get; protected set; } = true;
         public virtual int InitOrder { get; } = 0;
+        protected Transform _transform;
 
 
         public virtual void Init(int monoId)
         {
+            this._transform = this.transform;
             this.MonoId = monoId;
             this.IsActive = this.enabled;
         }

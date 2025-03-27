@@ -10,13 +10,11 @@ namespace NipaGameKit
     {
         public virtual Vector3 Velocity { get; protected set; }
         public virtual bool IsMoving => this.Velocity.sqrMagnitude > 0.01f;
-        protected Transform _transform;
 
 
         public override void Init(int monoId)
         {
             base.Init(monoId);
-            this._transform = this.transform;
             CompGroup<MoveCompBase>.Add(this);
         }
 
