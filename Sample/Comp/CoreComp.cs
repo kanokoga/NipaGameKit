@@ -15,13 +15,11 @@ namespace NipaGameKit
         [SerializeField] private Faction faction;
         [SerializeField] private float maxHitpoint;
         [SerializeField] private float hitpoint;
-        private Transform _transform;
 
 
         public override void Init(int monoId)
         {
             base.Init(monoId);
-            this._transform = this.transform;
             if(this.hitpoint <= 0)
             {
                 this.hitpoint = this.maxHitpoint;
@@ -35,7 +33,6 @@ namespace NipaGameKit
         public override void Dispose()
         {
             CompGroup<CoreComp>.Remove(this);
-            this._transform = null;
         }
     }
 

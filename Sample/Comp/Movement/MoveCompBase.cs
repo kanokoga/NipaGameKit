@@ -8,9 +8,7 @@ namespace NipaGameKit
 {
     public abstract class MoveCompBase : CompMonoBase
     {
-        public virtual Vector3 Velocity { get; protected set; }
-        public virtual bool IsMoving => this.Velocity.sqrMagnitude > 0.01f;
-
+        public Vector3 Destination { get; protected set; }
 
         public override void Init(int monoId)
         {
@@ -20,8 +18,7 @@ namespace NipaGameKit
 
         public override void UpdateComponent(float time, float deltaTime)
         {
-            this._transform.LookAt(this._transform.position + this.Velocity);
-            this._transform.position += this.Velocity * deltaTime;
+
         }
 
         public virtual void SetPosition(Vector3 position)
@@ -29,9 +26,9 @@ namespace NipaGameKit
             this._transform.position = position;
         }
 
-        public virtual bool SetDestination(Vector3 destination)
+        public virtual void SetDestination(Vector3 destination)
         {
-            return true;
+            this.Destination = destination;
         }
 
         public virtual void SetDirection(Vector3 direction)
@@ -41,7 +38,7 @@ namespace NipaGameKit
 
         public virtual void Stop()
         {
-            this.Velocity = Vector3.zero;
+
         }
 
         public override void Dispose()
@@ -52,13 +49,13 @@ namespace NipaGameKit
 
         protected void OnDrawGizmosSelected()
         {
-            if(Application.isPlaying==false)
+            if(Application.isPlaying == false)
             {
                 return;
             }
 
             Gizmos.color = Color.yellow;
-            Gizmos.DrawLine(this._transform.position, this._transform.position + this.Velocity * 5f);
+            Gizmos.DrawLine(this._transform.position, this.Destination);
         }
     }
 }

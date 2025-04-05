@@ -33,6 +33,9 @@ namespace NipaGameKit
         {
         }
 
-        public abstract void Dispose();
+        public virtual void Dispose()
+        {
+            this._transform = null;
+        }
     }
 }
