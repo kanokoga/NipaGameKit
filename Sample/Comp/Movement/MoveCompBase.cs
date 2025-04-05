@@ -9,6 +9,7 @@ namespace NipaGameKit
     public abstract class MoveCompBase : CompMonoBase
     {
         public Vector3 Destination { get; protected set; }
+        public bool HasArrivedDestination { get; protected set; } = false;
 
         public override void Init(int monoId)
         {
@@ -47,7 +48,7 @@ namespace NipaGameKit
             this._transform = null;
         }
 
-        protected void OnDrawGizmosSelected()
+        protected virtual void OnDrawGizmosSelected()
         {
             if(Application.isPlaying == false)
             {
