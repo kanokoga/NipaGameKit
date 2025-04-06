@@ -55,8 +55,8 @@ namespace NipaGameKit
                 return;
             }
 
-            Gizmos.color = Color.yellow;
-            Gizmos.DrawLine(this._transform.position, this.Destination);
+            Gizmos.color = Color.magenta;
+            Gizmos.DrawWireSphere(this.Destination, 0.5f);
         }
     }
 }
