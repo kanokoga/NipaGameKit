@@ -9,7 +9,9 @@ namespace NipaGameKit
     public abstract class MoveCompBase : CompMonoBase
     {
         public Vector3 Destination { get; protected set; }
-        public bool HasArrivedDestination { get; protected set; } = false;
+        public bool HasArrived { get; protected set; } = false;
+        public Action OnArrived { get; set; } = delegate{ };
+
 
         public override void Init(int monoId)
         {
@@ -45,7 +47,14 @@ namespace NipaGameKit
         public override void Dispose()
         {
             CompGroup<MoveCompBase>.Remove(this);
+            this.OnArrived = null;
             this._transform = null;
+        }
+
+        protected void InvokeArrived()
+        {
+            this.HasArrived = true;
+            this.OnArrived?.Invoke();
         }
 
         protected virtual void OnDrawGizmosSelected()

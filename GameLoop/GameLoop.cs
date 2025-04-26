@@ -8,6 +8,7 @@ namespace NipaGameKit
     public class GameLoop : MonoBehaviour
     {
         [SerializeField] private float timeScale = 1f;
+        public static float CurrentTime { get; protected set; }
         private GameLoopBase[] gameLoops;
 
 
@@ -18,11 +19,11 @@ namespace NipaGameKit
 
         private void Update()
         {
-            var time = Time.timeSinceLevelLoad * this.timeScale;
+            CurrentTime = Time.timeSinceLevelLoad * this.timeScale;
             var deltaTime = Time.deltaTime * this.timeScale;
-            for (int i = 0; i < this.gameLoops.Length; i++)
+            for(int i = 0; i < this.gameLoops.Length; i++)
             {
-                this.gameLoops[i].UpdateGameloop(time, deltaTime);
+                this.gameLoops[i].UpdateGameloop(CurrentTime, deltaTime);
             }
         }
     }
