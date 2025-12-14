@@ -6,6 +6,10 @@ using Unity.VisualScripting;
 
 namespace NipaGameKit
 {
+    /// <summary>
+    /// 非推奨: 新しいシステムではICompDataとCompDataProviderを使用してください
+    /// </summary>
+    [Obsolete("ICompGroupElementは非推奨です。ICompDataとCompDataProvider<TData>を使用してください。")]
     public interface ICompGroupElement
     {
         public int MonoId { get; }

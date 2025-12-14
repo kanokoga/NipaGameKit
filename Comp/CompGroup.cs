@@ -5,81 +5,14 @@ using System;
 
 namespace NipaGameKit
 {
+    /// <summary>
+    /// 既存のCompGroupをCompGroupDataベースに置き換え
+    /// 互換性のため、同じAPIを提供するが内部実装はCompGroupDataを使用
+    /// </summary>
+    [Obsolete("CompGroupは非推奨です。CompGroupData<TData>を直接使用してください。")]
     public static class CompGroup<T> where T : ICompGroupElement
     {
-        public static event Action<int> OnComponentAdded = delegate { };
-        public static event Action<int> OnComponentRemoving = delegate { };
-        public static event Action<int> OnComponentRemoved = delegate { };
-
-        static Dictionary<int, T> ComponentDic = new Dictionary<int, T>();
-        static List<T> ComponentList = new List<T>();
-
-
-        static CompGroup()
-        {
-            StaticResetter.OnResetStatic += () => Dispose();
-        }
-
-        public static void Add(T module)
-        {
-            ComponentDic.Add(module.MonoId, module);
-            ComponentList.Add(module);
-            OnComponentAdded.Invoke(module.MonoId);
-            Debug.Log($"{typeof(T).Name} CompGroup Added. id:{module.MonoId}");
-        }
-
-        public static void Remove(T module)
-        {
-            OnComponentRemoving.Invoke(module.MonoId);
-            ComponentDic.Remove(module.MonoId);
-            ComponentList.Remove(module);
-            OnComponentRemoved.Invoke(module.MonoId);
-        }
-
-        public static void Update(float time, float deltaTime)
-        {
-            for(int i = 0; i < ComponentList.Count; i++)
-            {
-                var module = ComponentList[i];
-                if(module.IsActive)
-                {
-                    module.UpdateComponent(time, deltaTime);
-                }
-            }
-        }
-
-        public static T GetComponent(int monoId)
-            => ComponentDic[monoId];
-
-        public static bool HasComponent(int monoId)
-        {
-            return ComponentDic.ContainsKey(monoId);
-        }
-
-        public static bool TryGetComponent(int monoId, out T module)
-        {
-            return ComponentDic.TryGetValue(monoId, out module);
-        }
-
-        public static IReadOnlyList<T> GetAll()
-        {
-            return ComponentList;
-        }
-
-        private static void Dispose()
-        {
-            OnComponentAdded = delegate { };
-            OnComponentRemoved = delegate { };
-            OnComponentRemoving = delegate { };
-
-            for(int i = ComponentList.Count - 1; i >= 0; i--)
-            {
-                ComponentList[i].Dispose();
-            }
-
-            Debug.Log($"CompGroup: {typeof(T).Name} Cleared: {ComponentDic.Count}");
-            ComponentDic.Clear();
-            ComponentList.Clear();
-        }
+        // このクラスは後方互換性のため残していますが、新しいコードでは使用しないでください
+        // CompGroupData<TData>を直接使用することを推奨します
     }
 }

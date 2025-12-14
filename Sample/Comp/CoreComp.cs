@@ -24,7 +24,7 @@ namespace NipaGameKit
             {
                 this.hitpoint = this.maxHitpoint;
             }
-            CompGroup<CoreComp>.Add(this);
+         //   CompGroup<CoreComp>.Add(this);
         }
 
         public virtual void AddHitpoint(float add)
@@ -32,7 +32,7 @@ namespace NipaGameKit
 
         public override void Dispose()
         {
-            CompGroup<CoreComp>.Remove(this);
+          //  CompGroup<CoreComp>.Remove(this);
         }
     }
 

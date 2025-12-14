@@ -18,7 +18,7 @@ namespace NipaGameKit
                 d.Init(monoId);
             }
 
-            CompGroup<OnDeathComp>.Add(this);
+           // CompGroup<OnDeathComp>.Add(this);
         }
 
         public virtual void OnDeath()
@@ -35,7 +35,7 @@ namespace NipaGameKit
             {
                 d.Dispose();
             }
-            CompGroup<OnDeathComp>.Remove(this);
+           // CompGroup<OnDeathComp>.Remove(this);
         }
     }
 }

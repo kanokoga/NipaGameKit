@@ -12,7 +12,7 @@ namespace NipaGameKit
         public override void Init(int monoId)
         {
             base.Init(monoId);
-            this.coreComp = CompGroup<CoreComp>.GetComponent(this.MonoId);
+           // this.coreComp = CompGroup<CoreComp>.GetComponent(this.MonoId);
         }
 
         public override void Dispose()

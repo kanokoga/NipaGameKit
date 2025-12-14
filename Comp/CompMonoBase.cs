@@ -7,6 +7,10 @@ using UnityEngine.Serialization;
 
 namespace NipaGameKit
 {
+    /// <summary>
+    /// 非推奨: 新しいシステムではCompDataProvider<TData>を使用してください
+    /// </summary>
+    [Obsolete("CompMonoBaseは非推奨です。CompDataProvider<TData>を使用してください。")]
     public abstract class CompMonoBase : MonoBehaviour, ICompGroupElement
     {
         public virtual Vector3 Position => this._transform.position;
