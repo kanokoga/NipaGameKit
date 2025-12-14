@@ -13,7 +13,7 @@ namespace NipaGameKit
     /// SoA（Structure of Arrays）構造でデータを保持
     /// 連続メモリに配置され、キャッシュフレンドリーなアクセスを実現
     /// </summary>
-    public static class CompGroupData<TData> where TData : struct, ICompData
+    public static class CompDataGroup<TData> where TData : struct, ICompData
     {
         public static event Action<int> OnDataAdded = delegate { };
         public static event Action<int> OnDataRemoving = delegate { };
@@ -29,7 +29,7 @@ namespace NipaGameKit
         private static int[] _activeIndices = new int[256];
         private static int _activeCount = 0;
 
-        static CompGroupData()
+        static CompDataGroup()
         {
             StaticResetter.OnResetStatic += Dispose;
             // 初期化時にmonoIdToIndexを-1で埋める（無効なインデックス）

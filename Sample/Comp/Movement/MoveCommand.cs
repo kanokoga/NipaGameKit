@@ -60,9 +60,9 @@ namespace NipaGameKit
         {
             while(CommandQueue<MoveCommand>.TryDequeue(out MoveCommand command))
             {
-                if(CompGroupData<MoveCompData>.HasData(command.MonoId))
+                if(CompDataGroup<MoveCompData>.HasData(command.MonoId))
                 {
-                    ref var data = ref CompGroupData<MoveCompData>.GetData(command.MonoId);
+                    ref var data = ref CompDataGroup<MoveCompData>.GetData(command.MonoId);
                     data.Destination = command.Destination;
                     data.HasArrived = false;
 

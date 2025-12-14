@@ -17,7 +17,7 @@ namespace NipaGameKit
         {
             _currentTime = time;
             _currentDeltaTime = deltaTime;
-            CompGroupData<TData>.UpdateActiveData(UpdateDataCallback);
+            CompDataGroup<TData>.UpdateActiveData(UpdateDataCallback);
         }
 
         private void UpdateDataCallback(int monoId, ref TData data)
