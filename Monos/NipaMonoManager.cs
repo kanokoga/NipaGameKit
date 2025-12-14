@@ -6,7 +6,7 @@ using UnityEngine;
 
 namespace NipaGameKit
 {
-    public class MonoManager : SingletonMonoBehaviour<MonoManager>
+    public class NipaMonoManager : SingletonMonoBehaviour<NipaMonoManager>
     {
         public static IReadOnlyCollection<int> ActiveMonoIds => _ActiveMonoIds;
         public static event Action<int> OnMonoIsPreReady = delegate { };

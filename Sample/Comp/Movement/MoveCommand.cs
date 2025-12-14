@@ -46,7 +46,7 @@ namespace NipaGameKit
             var command = new MoveCommand
             {
                 MonoId = monoId,
-                Destination = CompRegistry.GetPosition(monoId), // 現在位置
+                Destination = UnityObjectRegistry.GetPosition(monoId), // 現在位置
                 Speed = 0,
                 StopOnArrival = true
             };

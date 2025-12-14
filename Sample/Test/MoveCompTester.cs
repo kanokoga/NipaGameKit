@@ -102,7 +102,7 @@ namespace NipaGameKit
                 return;
             }
 
-            Vector3 currentPos = CompRegistry.GetPosition(targetMonoId);
+            Vector3 currentPos = UnityObjectRegistry.GetPosition(targetMonoId);
             float distance = Vector3.Distance(currentPos, data.Destination);
 
             Debug.Log($"MoveCompTester: MonoId {targetMonoId} の状態\n" +
@@ -120,7 +120,7 @@ namespace NipaGameKit
         [ContextMenu("目的地を相対位置で設定")]
         public void SetDestinationRelative()
         {
-            Vector3 currentPos = CompRegistry.GetPosition(targetMonoId);
+            Vector3 currentPos = UnityObjectRegistry.GetPosition(targetMonoId);
             destination = currentPos + destination;
             ExecuteMove();
         }
@@ -140,7 +140,7 @@ namespace NipaGameKit
             // ターゲットの現在位置を表示
             if (CompDataGroup<MoveCompData>.HasData(targetMonoId))
             {
-                Vector3 targetPos = CompRegistry.GetPosition(targetMonoId);
+                Vector3 targetPos = UnityObjectRegistry.GetPosition(targetMonoId);
                 Gizmos.color = Color.green;
                 Gizmos.DrawWireSphere(targetPos, 0.3f);
                 Gizmos.DrawLine(targetPos, destination);

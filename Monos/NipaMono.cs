@@ -73,13 +73,13 @@ namespace NipaGameKit
 
         private void Start()
         {
-            MonoManager.Instance.SetMonoActive(this);
+            NipaMonoManager.Instance.SetMonoActive(this);
         }
 
         protected virtual void OnDestroy()
         {
             // CompRegistryから削除（各CompDataProviderのOnDestroyでも削除されるが念のため）
-            CompRegistry.Unregister(this.MonoId);
+            UnityObjectRegistry.Unregister(this.MonoId);
         }
     }
 }

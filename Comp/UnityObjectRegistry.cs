@@ -7,7 +7,7 @@ namespace NipaGameKit
     /// MonoIdとUnityオブジェクト（Transformなど）のマッピング
     /// データ構造からUnityの機能にアクセスするためのレジストリ
     /// </summary>
-    public static class CompRegistry
+    public static class UnityObjectRegistry
     {
         private static Dictionary<int, Transform> _monoIdToTransform = new Dictionary<int, Transform>();
         private static Dictionary<int, GameObject> _monoIdToGameObject = new Dictionary<int, GameObject>();

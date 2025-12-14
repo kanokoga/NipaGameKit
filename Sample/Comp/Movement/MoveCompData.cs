@@ -54,13 +54,13 @@ namespace NipaGameKit
                 
                 // 位置を更新
                 Vector3 newPos = currentPos + data.Velocity * deltaTime;
-                CompRegistry.SetPosition(monoId, newPos);
+                UnityObjectRegistry.SetPosition(monoId, newPos);
             }
         }
 
         private Vector3 GetPosition(int monoId)
         {
-            return CompRegistry.GetPosition(monoId);
+            return UnityObjectRegistry.GetPosition(monoId);
         }
     }
 }

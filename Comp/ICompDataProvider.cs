@@ -35,7 +35,7 @@ namespace NipaGameKit
             MonoId = monoId;
             
             // Transformを登録
-            CompRegistry.Register(monoId, transform);
+            UnityObjectRegistry.Register(monoId, transform);
             
             // データを作成して登録
             var data = CreateData(monoId);
@@ -66,7 +66,7 @@ namespace NipaGameKit
             if (MonoId > 0)
             {
                 CompDataGroup<TData>.Remove(MonoId);
-                CompRegistry.Unregister(MonoId);
+                UnityObjectRegistry.Unregister(MonoId);
             }
         }
 
