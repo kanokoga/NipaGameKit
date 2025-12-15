@@ -6,7 +6,7 @@ namespace NipaGameKit
     /// データ構造を提供するコンポーネントの基底クラス
     /// MonoBehaviourとしてUnityエディタで設定可能だが、実際の処理はデータ構造で行う
     /// </summary>
-    public abstract class CompDataProvider<TData> : MonoBehaviour
+    public abstract class Comp<TData> : MonoBehaviour
         where TData : struct, ICompData
     {
         public int MonoId { get; private set; }
@@ -33,10 +33,10 @@ namespace NipaGameKit
         public void Init(int monoId)
         {
             MonoId = monoId;
-            
+
             // Transformを登録
             UnityObjectRegistry.Register(monoId, transform);
-            
+
             // データを作成して登録
             var data = CreateData(monoId);
             data.MonoId = monoId;

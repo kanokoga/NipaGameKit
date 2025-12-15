@@ -48,7 +48,7 @@ namespace NipaGameKit
             var type = comp.GetType();
             while (type != null && type != typeof(MonoBehaviour))
             {
-                if (type.IsGenericType && type.GetGenericTypeDefinition() == typeof(CompDataProvider<>))
+                if (type.IsGenericType && type.GetGenericTypeDefinition() == typeof(Comp<>))
                 {
                     return true;
                 }

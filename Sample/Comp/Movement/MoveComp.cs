@@ -6,7 +6,7 @@ namespace NipaGameKit
     /// 移動コンポーネントのデータプロバイダー
     /// Unityエディタで設定可能だが、実際の処理はMoveCompDataとMoveCompSystemで行う
     /// </summary>
-    public class MoveCompProvider : CompDataProvider<MoveCompData>
+    public class MoveCompProvider : Comp<MoveCompData>
     {
         [SerializeField] private float speed = 5.0f;
 
@@ -65,7 +65,7 @@ namespace NipaGameKit
             {
                 Gizmos.color = Color.magenta;
                 Gizmos.DrawWireSphere(data.Destination, 0.5f);
-                
+
                 Gizmos.color = Color.cyan;
                 Gizmos.DrawLine(transform.position, data.Destination);
             }
