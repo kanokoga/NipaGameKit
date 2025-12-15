@@ -8,19 +8,13 @@ namespace NipaGameKit
     /// Systemの管理クラス
     /// 型ごとにSystemインスタンスを保持し、更新を管理
     /// </summary>
-    public class CompSystemManager : MonoBehaviour
+    public class CompSystemsUpdater : MonoBehaviour
     {
-        private static CompSystemManager _instance;
-        public static CompSystemManager Instance
+        private static CompSystemsUpdater _instance;
+        public static CompSystemsUpdater Instance
         {
             get
             {
-                if (_instance == null)
-                {
-                    var go = new GameObject("CompSystemManager");
-                    _instance = go.AddComponent<CompSystemManager>();
-                    DontDestroyOnLoad(go);
-                }
                 return _instance;
             }
         }
@@ -33,7 +27,6 @@ namespace NipaGameKit
             if (_instance == null)
             {
                 _instance = this;
-                DontDestroyOnLoad(gameObject);
             }
             else if (_instance != this)
             {
@@ -89,6 +82,10 @@ namespace NipaGameKit
         {
             _systems.Clear();
             _updaters.Clear();
+            if (_instance == this)
+            {
+                _instance = null;
+            }
         }
 
         // System更新のためのインターフェース
