@@ -47,7 +47,7 @@ namespace NipaGameKit
         /// </summary>
         public void ExecuteMove()
         {
-            if (!CompDataGroup<MoveCompData>.HasData(targetMonoId))
+            if (!CompDataCollection<MoveCompData>.HasData(targetMonoId))
             {
                 if (showDebugInfo)
                 {
@@ -71,7 +71,7 @@ namespace NipaGameKit
         /// </summary>
         public void ExecuteStop()
         {
-            if (!CompDataGroup<MoveCompData>.HasData(targetMonoId))
+            if (!CompDataCollection<MoveCompData>.HasData(targetMonoId))
             {
                 if (showDebugInfo)
                 {
@@ -96,7 +96,7 @@ namespace NipaGameKit
         [ContextMenu("現在の状態を表示")]
         public void ShowCurrentState()
         {
-            if (!CompDataGroup<MoveCompData>.TryGetData(targetMonoId, out MoveCompData data))
+            if (!CompDataCollection<MoveCompData>.TryGetData(targetMonoId, out MoveCompData data))
             {
                 Debug.LogWarning($"MoveCompTester: MonoId {targetMonoId} のMoveCompDataが見つかりません");
                 return;
@@ -138,7 +138,7 @@ namespace NipaGameKit
             Gizmos.DrawLine(transform.position, destination);
 
             // ターゲットの現在位置を表示
-            if (CompDataGroup<MoveCompData>.HasData(targetMonoId))
+            if (CompDataCollection<MoveCompData>.HasData(targetMonoId))
             {
                 Vector3 targetPos = UnityObjectRegistry.GetPosition(targetMonoId);
                 Gizmos.color = Color.green;

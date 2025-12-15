@@ -220,8 +220,10 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 912000252}
-  - component: {fileID: 912000251}
   - component: {fileID: 912000253}
+  - component: {fileID: 912000255}
+  - component: {fileID: 912000254}
+  - component: {fileID: 912000256}
   m_Layer: 0
   m_Name: Managers
   m_TagString: Untagged
@@ -229,18 +231,6 @@ GameObject:
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
   m_IsActive: 1
---- !u!114 &912000251
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 912000250}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: dd2465b230b4ced4fa6695abfd99cae7, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: Assembly-CSharp::NipaGameKit.ComponentUpdater
 --- !u!4 &912000252
 Transform:
   m_ObjectHideFlags: 0
@@ -268,6 +258,42 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 5808b0ddfe440ad48a16630bb5290849, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::NipaGameKit.MonoManager
+--- !u!114 &912000254
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 912000250}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 7de9fe9bd29c8fa43ab9fee8173503ed, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::NipaGameKit.MoveCompRegister
+--- !u!114 &912000255
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 912000250}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 95205014d15286f478b9e5cac181f2d0, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::NipaGameKit.CompSystemsUpdater
+--- !u!114 &912000256
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 912000250}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: efc9f11ee242c8042bccf85c257939a9, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::NipaGameKit.StaticResetter
 --- !u!1 &1364609779
 GameObject:
   m_ObjectHideFlags: 0

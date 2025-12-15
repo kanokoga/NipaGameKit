@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using NipaFriends;
 using UnityEngine;
 
 namespace NipaGameKit
@@ -8,31 +9,11 @@ namespace NipaGameKit
     /// Systemの管理クラス
     /// 型ごとにSystemインスタンスを保持し、更新を管理
     /// </summary>
-    public class CompSystemsUpdater : MonoBehaviour
+    public class CompSystemsUpdater : SingletonMonoBehaviour<CompSystemsUpdater>
     {
-        private static CompSystemsUpdater _instance;
-        public static CompSystemsUpdater Instance
-        {
-            get
-            {
-                return _instance;
-            }
-        }
-
         private Dictionary<Type, object> _systems = new Dictionary<Type, object>();
         private List<ISystemUpdater> _updaters = new List<ISystemUpdater>();
 
-        private void Awake()
-        {
-            if (_instance == null)
-            {
-                _instance = this;
-            }
-            else if (_instance != this)
-            {
-                Destroy(gameObject);
-            }
-        }
 
         /// <summary>
         /// Systemを登録
@@ -78,14 +59,11 @@ namespace NipaGameKit
             UpdateSystems(time, deltaTime);
         }
 
-        private void OnDestroy()
+        protected override void OnDestroy()
         {
             _systems.Clear();
             _updaters.Clear();
-            if (_instance == this)
-            {
-                _instance = null;
-            }
+            base.OnDestroy();
         }
 
         // System更新のためのインターフェース

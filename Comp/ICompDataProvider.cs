@@ -42,14 +42,14 @@ namespace NipaGameKit
             data.MonoId = monoId;
             data.IsActive = enabled;
             SyncToData(ref data);
-            CompDataGroup<TData>.Add(monoId, data);
+            CompDataCollection<TData>.Add(monoId, data);
         }
 
         protected virtual void OnEnable()
         {
             if (MonoId > 0)
             {
-                CompDataGroup<TData>.SetActive(MonoId, true);
+                CompDataCollection<TData>.SetActive(MonoId, true);
             }
         }
 
@@ -57,7 +57,7 @@ namespace NipaGameKit
         {
             if (MonoId > 0)
             {
-                CompDataGroup<TData>.SetActive(MonoId, false);
+                CompDataCollection<TData>.SetActive(MonoId, false);
             }
         }
 
@@ -65,7 +65,7 @@ namespace NipaGameKit
         {
             if (MonoId > 0)
             {
-                CompDataGroup<TData>.Remove(MonoId);
+                CompDataCollection<TData>.Remove(MonoId);
                 UnityObjectRegistry.Unregister(MonoId);
             }
         }
@@ -75,7 +75,7 @@ namespace NipaGameKit
         /// </summary>
         public bool TryGetData(out TData data)
         {
-            return CompDataGroup<TData>.TryGetData(MonoId, out data);
+            return CompDataCollection<TData>.TryGetData(MonoId, out data);
         }
 
         /// <summary>
@@ -83,7 +83,7 @@ namespace NipaGameKit
         /// </summary>
         public ref TData GetData()
         {
-            return ref CompDataGroup<TData>.GetData(MonoId);
+            return ref CompDataCollection<TData>.GetData(MonoId);
         }
     }
 }
