@@ -16,7 +16,7 @@ namespace NipaGameKit
         {
             return new MoveCompData
             {
-                MonoId = monoId,
+                EntityId = monoId,
                 IsActive = this.enabled,
                 Destination = this.transform.position,
                 HasArrived = true,

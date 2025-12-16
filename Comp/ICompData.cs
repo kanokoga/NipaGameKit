@@ -8,7 +8,7 @@ namespace NipaGameKit
     /// </summary>
     public interface ICompData
     {
-        int MonoId { get; set; }
+        int EntityId { get; set; }
         bool IsActive { get; set; }
     }
 
@@ -17,7 +17,7 @@ namespace NipaGameKit
     /// </summary>
     public struct CompDataBase : ICompData
     {
-        public int MonoId { get; set; }
+        public int EntityId { get; set; }
         public bool IsActive { get; set; }
     }
 }

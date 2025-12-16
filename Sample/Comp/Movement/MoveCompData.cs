@@ -7,7 +7,7 @@ namespace NipaGameKit
     /// </summary>
     public struct MoveCompData : ICompData
     {
-        public int MonoId { get; set; }
+        public int EntityId { get; set; }
         public bool IsActive { get; set; }
 
         // 移動データ

@@ -52,7 +52,7 @@ namespace NipaGameKit
 
             var index = _count;
             _dataArray[index] = data;
-            _dataArray[index].MonoId = monoId;
+            _dataArray[index].EntityId = monoId;
             _dataArray[index].IsActive = true;
 
             _monoIdToIndex[monoId] = index;
@@ -86,7 +86,7 @@ namespace NipaGameKit
             var lastIndex = _count - 1;
             if (index != lastIndex)
             {
-                var lastMonoId = _dataArray[lastIndex].MonoId;
+                var lastMonoId = _dataArray[lastIndex].EntityId;
                 _dataArray[index] = _dataArray[lastIndex];
                 _monoIdToIndex[lastMonoId] = index;
 
@@ -166,7 +166,7 @@ namespace NipaGameKit
                 var index = _activeIndices[i];
                 if (index < _count && _dataArray[index].IsActive)
                 {
-                    updateAction(_dataArray[index].MonoId, ref _dataArray[index]);
+                    updateAction(_dataArray[index].EntityId, ref _dataArray[index]);
                 }
             }
         }

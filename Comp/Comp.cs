@@ -39,7 +39,7 @@ namespace NipaGameKit
 
             // データを作成して登録
             var data = this.CreateData(monoId);
-            data.MonoId = monoId;
+            data.EntityId = monoId;
             data.IsActive = this.enabled;
             this.SyncToData(ref data);
             CompDataCollection<TData>.Add(monoId, data);
