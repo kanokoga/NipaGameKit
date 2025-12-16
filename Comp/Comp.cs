@@ -28,7 +28,7 @@ namespace NipaGameKit
         protected virtual void SyncFromData(ref TData data) { }
 
         /// <summary>
-        /// NipaMonoから呼ばれる初期化処理
+        /// NipaEntityから呼ばれる初期化処理
         /// </summary>
         public void Init(int monoId)
         {

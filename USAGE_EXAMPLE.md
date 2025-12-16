@@ -5,7 +5,7 @@
 ### 1. GameObjectのセットアップ
 
 1. **GameObjectを作成**
-2. **`NipaMono`コンポーネントを追加**
+2. **`NipaEntity`コンポーネントを追加**
    - これがエントリーポイントで、すべての`CompDataProvider`を自動検出・初期化します
 3. **`MoveCompProvider`コンポーネントを追加**
    - Inspectorで`Speed`を設定可能
@@ -191,7 +191,7 @@ CompSystemManager.Instance.RegisterSystem<HealthCompData>(healthCompSystem);
 
 ### 7. 注意点
 
-- `NipaMono`は必ずGameObjectにアタッチする必要があります
-- `CompDataProvider`は`NipaMono`と同じGameObjectにアタッチする必要があります
+- `NipaEntity`は必ずGameObjectにアタッチする必要があります
+- `CompDataProvider`は`NipaEntity`と同じGameObjectにアタッチする必要があります
 - Systemはシーンに1回だけ登録してください（`ComponentUpdater`で自動管理）
 

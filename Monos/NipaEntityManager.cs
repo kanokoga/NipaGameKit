@@ -6,7 +6,7 @@ using UnityEngine;
 
 namespace NipaGameKit
 {
-    public class NipaMonoManager : SingletonMonoBehaviour<NipaMonoManager>
+    public class NipaEntityManager : SingletonMonoBehaviour<NipaEntityManager>
     {
         public static IReadOnlyCollection<int> ActiveMonoIds => _ActiveMonoIds;
         public static event Action<int> OnMonoIsPreReady = delegate { };
@@ -15,18 +15,18 @@ namespace NipaGameKit
         private static List<int> _ActiveMonoIds = new List<int>();
 
 
-        public void SetMonoActive(NipaMono nipaMono)
+        public void SetEntityActive(NipaEntity nipaEntity)
         {
-            OnMonoIsPreReady.Invoke(nipaMono.MonoId);
-            nipaMono.gameObject.SetActive(true);
-            OnMonoIsReady.Invoke(nipaMono.MonoId);
-            _ActiveMonoIds.Add(nipaMono.MonoId);
+            OnMonoIsPreReady.Invoke(nipaEntity.EntityId);
+            nipaEntity.gameObject.SetActive(true);
+            OnMonoIsReady.Invoke(nipaEntity.EntityId);
+            _ActiveMonoIds.Add(nipaEntity.EntityId);
         }
 
-        public void SetMonoDead(NipaMono nipaMono)
+        public void SetEntityDead(NipaEntity nipaEntity)
         {
-            _ActiveMonoIds.Remove(nipaMono.MonoId);
-            OnMonoIsDying.Invoke(nipaMono.MonoId);
+            _ActiveMonoIds.Remove(nipaEntity.EntityId);
+            OnMonoIsDying.Invoke(nipaEntity.EntityId);
         }
 
         private void OnDestroy()

@@ -10,17 +10,17 @@ namespace NipaGameKit
     /// データ構造ベースのコンポーネントシステムのエントリーポイント
     /// CompDataProviderを自動的に検出して初期化
     /// </summary>
-    public class NipaMono : MonoBehaviour
+    public class NipaEntity : MonoBehaviour
     {
         private static int GlobalMonoId = 0;
-        public int MonoId { get; private set; }
+        public int EntityId { get; private set; }
         private MonoBehaviour[] _dataProviders;
 
         private void Awake()
         {
-            this.MonoId = GlobalMonoId;
+            this.EntityId = GlobalMonoId;
             #if UNITY_EDITOR
-            this.gameObject.name += $"_{this.MonoId}";
+            this.gameObject.name += $"_{this.EntityId}";
             #endif
 
             GlobalMonoId++;
@@ -38,7 +38,7 @@ namespace NipaGameKit
                 var initMethod = provider.GetType().GetMethod("Init", new[] { typeof(int) });
                 if (initMethod != null)
                 {
-                    initMethod.Invoke(provider, new object[] { this.MonoId });
+                    initMethod.Invoke(provider, new object[] { this.EntityId });
                 }
             }
         }
@@ -73,13 +73,13 @@ namespace NipaGameKit
 
         private void Start()
         {
-            NipaMonoManager.Instance.SetMonoActive(this);
+            NipaEntityManager.Instance.SetEntityActive(this);
         }
 
         protected virtual void OnDestroy()
         {
             // CompRegistryから削除（各CompDataProviderのOnDestroyでも削除されるが念のため）
-            UnityObjectRegistry.Unregister(this.MonoId);
+            UnityObjectRegistry.Unregister(this.EntityId);
         }
     }
 }

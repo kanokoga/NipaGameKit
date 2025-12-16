@@ -141,9 +141,9 @@ private void Awake()
 
 ### 5. GameObjectのセットアップ
 
-1. GameObjectに`NipaMono`コンポーネントを追加
+1. GameObjectに`NipaEntity`コンポーネントを追加
 2. 同じGameObjectに`MoveCompProvider`などのデータプロバイダーを追加
-3. `NipaMono`が自動的にすべてのデータプロバイダーを検出して初期化
+3. `NipaEntity`が自動的にすべてのデータプロバイダーを検出して初期化
 
 ## パフォーマンス比較
 
