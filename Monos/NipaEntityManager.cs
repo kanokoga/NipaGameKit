@@ -8,32 +8,32 @@ namespace NipaGameKit
 {
     public class NipaEntityManager : SingletonMonoBehaviour<NipaEntityManager>
     {
-        public static IReadOnlyCollection<int> ActiveMonoIds => _ActiveMonoIds;
-        public static event Action<int> OnMonoIsPreReady = delegate { };
-        public static event Action<int> OnMonoIsReady = delegate { };
-        public static event Action<int> OnMonoIsDying = delegate { };
-        private static List<int> _ActiveMonoIds = new List<int>();
+        public  IReadOnlyCollection<int> ActiveEntityIds => this.activeEntityIds;
+        public  event Action<int> OnMonoIsPreReady = delegate { };
+        public  event Action<int> OnMonoIsReady = delegate { };
+        public  event Action<int> OnMonoIsDying = delegate { };
+        private  List<int> activeEntityIds = new List<int>();
 
 
         public void SetEntityActive(NipaEntity nipaEntity)
         {
-            OnMonoIsPreReady.Invoke(nipaEntity.EntityId);
+            this.OnMonoIsPreReady.Invoke(nipaEntity.EntityId);
             nipaEntity.gameObject.SetActive(true);
-            OnMonoIsReady.Invoke(nipaEntity.EntityId);
-            _ActiveMonoIds.Add(nipaEntity.EntityId);
+            this.OnMonoIsReady.Invoke(nipaEntity.EntityId);
+            this.activeEntityIds.Add(nipaEntity.EntityId);
         }
 
         public void SetEntityDead(NipaEntity nipaEntity)
         {
-            _ActiveMonoIds.Remove(nipaEntity.EntityId);
-            OnMonoIsDying.Invoke(nipaEntity.EntityId);
+            this.activeEntityIds.Remove(nipaEntity.EntityId);
+            this.OnMonoIsDying.Invoke(nipaEntity.EntityId);
         }
 
         private void OnDestroy()
         {
-            OnMonoIsReady = delegate { };
-            OnMonoIsDying = delegate { };
-            _ActiveMonoIds.Clear();
+            this.OnMonoIsReady = delegate { };
+            this.OnMonoIsDying = delegate { };
+            this.activeEntityIds.Clear();
         }
     }
 }
