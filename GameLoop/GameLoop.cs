@@ -21,7 +21,7 @@ namespace NipaGameKit
         {
             CurrentTime = Time.timeSinceLevelLoad * this.timeScale;
             var deltaTime = Time.deltaTime * this.timeScale;
-            for(int i = 0; i < this.gameLoops.Length; i++)
+            for(var i = 0; i < this.gameLoops.Length; i++)
             {
                 this.gameLoops[i].UpdateGameloop(CurrentTime, deltaTime);
             }

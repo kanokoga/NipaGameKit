@@ -15,14 +15,14 @@ namespace NipaGameKit
         /// </summary>
         public virtual void Update(float time, float deltaTime)
         {
-            _currentTime = time;
-            _currentDeltaTime = deltaTime;
-            CompDataCollection<TData>.UpdateActiveData(UpdateDataCallback);
+            this._currentTime = time;
+            this._currentDeltaTime = deltaTime;
+            CompDataCollection<TData>.UpdateActiveData(this.UpdateDataCallback);
         }
 
         private void UpdateDataCallback(int monoId, ref TData data)
         {
-            UpdateData(monoId, ref data, _currentTime, _currentDeltaTime);
+            this.UpdateData(monoId, ref data, this._currentTime, this._currentDeltaTime);
         }
 
         private float _currentTime;

@@ -33,7 +33,7 @@ namespace NipaGameKit
         {
             StaticResetter.OnResetStatic += Dispose;
             // 初期化時にmonoIdToIndexを-1で埋める（無効なインデックス）
-            for (int i = 0; i < _monoIdToIndex.Length; i++)
+            for (var i = 0; i < _monoIdToIndex.Length; i++)
             {
                 _monoIdToIndex[i] = -1;
             }
@@ -50,7 +50,7 @@ namespace NipaGameKit
                 Resize();
             }
 
-            int index = _count;
+            var index = _count;
             _dataArray[index] = data;
             _dataArray[index].MonoId = monoId;
             _dataArray[index].IsActive = true;
@@ -74,7 +74,7 @@ namespace NipaGameKit
         /// </summary>
         public static void Remove(int monoId)
         {
-            int index = _monoIdToIndex[monoId];
+            var index = _monoIdToIndex[monoId];
             if (index < 0 || index >= _count)
             {
                 return;
@@ -83,15 +83,15 @@ namespace NipaGameKit
             OnDataRemoving.Invoke(monoId);
 
             // 最後の要素とスワップして削除をO(1)に
-            int lastIndex = _count - 1;
+            var lastIndex = _count - 1;
             if (index != lastIndex)
             {
-                int lastMonoId = _dataArray[lastIndex].MonoId;
+                var lastMonoId = _dataArray[lastIndex].MonoId;
                 _dataArray[index] = _dataArray[lastIndex];
                 _monoIdToIndex[lastMonoId] = index;
 
                 // アクティブリストも更新
-                for (int i = 0; i < _activeCount; i++)
+                for (var i = 0; i < _activeCount; i++)
                 {
                     if (_activeIndices[i] == lastIndex)
                     {
@@ -105,7 +105,7 @@ namespace NipaGameKit
             _count--;
 
             // アクティブリストから削除
-            for (int i = 0; i < _activeCount; i++)
+            for (var i = 0; i < _activeCount; i++)
             {
                 if (_activeIndices[i] == index || _activeIndices[i] == lastIndex)
                 {
@@ -123,7 +123,7 @@ namespace NipaGameKit
         /// </summary>
         public static ref TData GetData(int monoId)
         {
-            int index = _monoIdToIndex[monoId];
+            var index = _monoIdToIndex[monoId];
             if (index < 0 || index >= _count)
             {
                 throw new ArgumentException($"Data not found for MonoId: {monoId}");
@@ -136,7 +136,7 @@ namespace NipaGameKit
         /// </summary>
         public static bool TryGetData(int monoId, out TData data)
         {
-            int index = _monoIdToIndex[monoId];
+            var index = _monoIdToIndex[monoId];
             if (index >= 0 && index < _count)
             {
                 data = _dataArray[index];
@@ -151,7 +151,7 @@ namespace NipaGameKit
         /// </summary>
         public static bool HasData(int monoId)
         {
-            int index = _monoIdToIndex[monoId];
+            var index = _monoIdToIndex[monoId];
             return index >= 0 && index < _count;
         }
 
@@ -161,9 +161,9 @@ namespace NipaGameKit
         public static void UpdateActiveData(UpdateDataDelegate<TData> updateAction)
         {
             // アクティブなインデックスのみをループ（連続メモリアクセス）
-            for (int i = 0; i < _activeCount; i++)
+            for (var i = 0; i < _activeCount; i++)
             {
-                int index = _activeIndices[i];
+                var index = _activeIndices[i];
                 if (index < _count && _dataArray[index].IsActive)
                 {
                     updateAction(_dataArray[index].MonoId, ref _dataArray[index]);
@@ -176,7 +176,7 @@ namespace NipaGameKit
         /// </summary>
         public static TData[] GetAllData()
         {
-            TData[] result = new TData[_count];
+            var result = new TData[_count];
             Array.Copy(_dataArray, result, _count);
             return result;
         }
@@ -196,18 +196,18 @@ namespace NipaGameKit
         /// </summary>
         public static void SetActive(int monoId, bool isActive)
         {
-            if (TryGetData(monoId, out TData data))
+            if (TryGetData(monoId, out var data))
             {
                 data.IsActive = isActive;
-                int index = _monoIdToIndex[monoId];
+                var index = _monoIdToIndex[monoId];
                 _dataArray[index] = data;
 
                 // アクティブリストの更新
                 if (isActive)
                 {
                     // 追加（重複チェック）
-                    bool exists = false;
-                    for (int i = 0; i < _activeCount; i++)
+                    var exists = false;
+                    for (var i = 0; i < _activeCount; i++)
                     {
                         if (_activeIndices[i] == index)
                         {
@@ -228,7 +228,7 @@ namespace NipaGameKit
                 else
                 {
                     // 削除
-                    for (int i = 0; i < _activeCount; i++)
+                    for (var i = 0; i < _activeCount; i++)
                     {
                         if (_activeIndices[i] == index)
                         {
@@ -243,7 +243,7 @@ namespace NipaGameKit
 
         private static void Resize()
         {
-            int newCapacity = _capacity * 2;
+            var newCapacity = _capacity * 2;
             Array.Resize(ref _dataArray, newCapacity);
             _capacity = newCapacity;
         }
@@ -259,7 +259,7 @@ namespace NipaGameKit
 
             // 配列をクリア
             Array.Clear(_dataArray, 0, _dataArray.Length);
-            for (int i = 0; i < _monoIdToIndex.Length; i++)
+            for (var i = 0; i < _monoIdToIndex.Length; i++)
             {
                 _monoIdToIndex[i] = -1;
             }

@@ -58,7 +58,7 @@ namespace NipaGameKit
         /// </summary>
         public static void ProcessCommands()
         {
-            while(CommandQueue<MoveCommand>.TryDequeue(out MoveCommand command))
+            while(CommandQueue<MoveCommand>.TryDequeue(out var command))
             {
                 if(CompDataCollection<MoveCompData>.HasData(command.MonoId))
                 {

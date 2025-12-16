@@ -17,17 +17,17 @@ namespace NipaGameKit
             return new MoveCompData
             {
                 MonoId = monoId,
-                IsActive = enabled,
-                Destination = transform.position,
+                IsActive = this.enabled,
+                Destination = this.transform.position,
                 HasArrived = true,
                 Velocity = Vector3.zero,
-                Speed = speed
+                Speed = this.speed
             };
         }
 
         protected override void SyncToData(ref MoveCompData data)
         {
-            data.Speed = speed;
+            data.Speed = this.speed;
         }
 
         /// <summary>
@@ -35,7 +35,7 @@ namespace NipaGameKit
         /// </summary>
         public void SetDestination(Vector3 destination)
         {
-            MoveCommandQueue.EnqueueMove(MonoId, destination);
+            MoveCommandQueue.EnqueueMove(this.MonoId, destination);
         }
 
         /// <summary>
@@ -43,7 +43,7 @@ namespace NipaGameKit
         /// </summary>
         public void SetDestination(Vector3 destination, float speed)
         {
-            MoveCommandQueue.EnqueueMove(MonoId, destination, speed);
+            MoveCommandQueue.EnqueueMove(this.MonoId, destination, speed);
         }
 
         /// <summary>
@@ -51,7 +51,7 @@ namespace NipaGameKit
         /// </summary>
         public void Stop()
         {
-            MoveCommandQueue.EnqueueStop(MonoId);
+            MoveCommandQueue.EnqueueStop(this.MonoId);
         }
 
         protected void OnDrawGizmosSelected()
@@ -61,13 +61,13 @@ namespace NipaGameKit
                 return;
             }
 
-            if (TryGetData(out MoveCompData data))
+            if (this.TryGetData(out var data))
             {
                 Gizmos.color = Color.magenta;
                 Gizmos.DrawWireSphere(data.Destination, 0.5f);
 
                 Gizmos.color = Color.cyan;
-                Gizmos.DrawLine(transform.position, data.Destination);
+                Gizmos.DrawLine(this.transform.position, data.Destination);
             }
         }
     }

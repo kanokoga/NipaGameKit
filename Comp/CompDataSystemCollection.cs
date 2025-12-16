@@ -9,7 +9,7 @@ namespace NipaGameKit
     /// Systemの管理クラス
     /// 型ごとにSystemインスタンスを保持し、更新を管理
     /// </summary>
-    public class CompDataSystemsUpdater : SingletonMonoBehaviour<CompDataSystemsUpdater>
+    public class CompDataSystemCollection : SingletonMonoBehaviour<CompDataSystemCollection>
     {
         private Dictionary<Type, object> _systems = new Dictionary<Type, object>();
         private List<ISystemUpdater> _updaters = new List<ISystemUpdater>();
@@ -20,11 +20,11 @@ namespace NipaGameKit
         /// </summary>
         public void RegisterSystem<TData>(CompDataSystem<TData> dataSystem) where TData : struct, ICompData
         {
-            Type type = typeof(TData);
-            if (!_systems.ContainsKey(type))
+            var type = typeof(TData);
+            if (!this._systems.ContainsKey(type))
             {
-                _systems[type] = dataSystem;
-                _updaters.Add(new SystemUpdater<TData>(dataSystem));
+                this._systems[type] = dataSystem;
+                this._updaters.Add(new SystemUpdater<TData>(dataSystem));
             }
         }
 
@@ -33,8 +33,8 @@ namespace NipaGameKit
         /// </summary>
         public CompDataSystem<TData> GetSystem<TData>() where TData : struct, ICompData
         {
-            Type type = typeof(TData);
-            if (_systems.TryGetValue(type, out object system))
+            var type = typeof(TData);
+            if (this._systems.TryGetValue(type, out var system))
             {
                 return (CompDataSystem<TData>)system;
             }
@@ -46,23 +46,16 @@ namespace NipaGameKit
         /// </summary>
         public void UpdateSystems(float time, float deltaTime)
         {
-            for (int i = 0; i < _updaters.Count; i++)
+            for (var i = 0; i < this._updaters.Count; i++)
             {
-                _updaters[i].Update(time, deltaTime);
+                this._updaters[i].Update(time, deltaTime);
             }
-        }
-
-        private void Update()
-        {
-            float time = GameLoop.CurrentTime;
-            float deltaTime = Time.deltaTime;
-            UpdateSystems(time, deltaTime);
         }
 
         protected override void OnDestroy()
         {
-            _systems.Clear();
-            _updaters.Clear();
+            this._systems.Clear();
+            this._updaters.Clear();
             base.OnDestroy();
         }
 

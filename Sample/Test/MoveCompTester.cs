@@ -29,16 +29,16 @@ namespace NipaGameKit
         private void Update()
         {
             // インスペクタのボタンが押されたら実行
-            if (executeMove)
+            if (this.executeMove)
             {
-                executeMove = false;
-                ExecuteMove();
+                this.executeMove = false;
+                this.ExecuteMove();
             }
 
-            if (executeStop)
+            if (this.executeStop)
             {
-                executeStop = false;
-                ExecuteStop();
+                this.executeStop = false;
+                this.ExecuteStop();
             }
         }
 
@@ -47,22 +47,22 @@ namespace NipaGameKit
         /// </summary>
         public void ExecuteMove()
         {
-            if (!CompDataCollection<MoveCompData>.HasData(targetMonoId))
+            if (!CompDataCollection<MoveCompData>.HasData(this.targetMonoId))
             {
-                if (showDebugInfo)
+                if (this.showDebugInfo)
                 {
-                    Debug.LogWarning($"MoveCompTester: MonoId {targetMonoId} のMoveCompDataが見つかりません");
+                    Debug.LogWarning($"MoveCompTester: MonoId {this.targetMonoId} のMoveCompDataが見つかりません");
                 }
                 return;
             }
 
             // コマンドキューに追加
-            MoveCommandQueue.EnqueueMove(targetMonoId, destination);
+            MoveCommandQueue.EnqueueMove(this.targetMonoId, this.destination);
 
-            if (showDebugInfo)
+            if (this.showDebugInfo)
             {
-                int queueSize = MoveCommandQueue.QueueSize;
-                Debug.Log($"MoveCompTester: MonoId {targetMonoId} に移動命令をキューに追加しました。目的地: {destination} (キューサイズ: {queueSize})");
+                var queueSize = MoveCommandQueue.QueueSize;
+                Debug.Log($"MoveCompTester: MonoId {this.targetMonoId} に移動命令をキューに追加しました。目的地: {this.destination} (キューサイズ: {queueSize})");
             }
         }
 
@@ -71,22 +71,22 @@ namespace NipaGameKit
         /// </summary>
         public void ExecuteStop()
         {
-            if (!CompDataCollection<MoveCompData>.HasData(targetMonoId))
+            if (!CompDataCollection<MoveCompData>.HasData(this.targetMonoId))
             {
-                if (showDebugInfo)
+                if (this.showDebugInfo)
                 {
-                    Debug.LogWarning($"MoveCompTester: MonoId {targetMonoId} のMoveCompDataが見つかりません");
+                    Debug.LogWarning($"MoveCompTester: MonoId {this.targetMonoId} のMoveCompDataが見つかりません");
                 }
                 return;
             }
 
             // コマンドキューに追加
-            MoveCommandQueue.EnqueueStop(targetMonoId);
+            MoveCommandQueue.EnqueueStop(this.targetMonoId);
 
-            if (showDebugInfo)
+            if (this.showDebugInfo)
             {
-                int queueSize = MoveCommandQueue.QueueSize;
-                Debug.Log($"MoveCompTester: MonoId {targetMonoId} に停止命令をキューに追加しました (キューサイズ: {queueSize})");
+                var queueSize = MoveCommandQueue.QueueSize;
+                Debug.Log($"MoveCompTester: MonoId {this.targetMonoId} に停止命令をキューに追加しました (キューサイズ: {queueSize})");
             }
         }
 
@@ -96,16 +96,16 @@ namespace NipaGameKit
         [ContextMenu("現在の状態を表示")]
         public void ShowCurrentState()
         {
-            if (!CompDataCollection<MoveCompData>.TryGetData(targetMonoId, out MoveCompData data))
+            if (!CompDataCollection<MoveCompData>.TryGetData(this.targetMonoId, out var data))
             {
-                Debug.LogWarning($"MoveCompTester: MonoId {targetMonoId} のMoveCompDataが見つかりません");
+                Debug.LogWarning($"MoveCompTester: MonoId {this.targetMonoId} のMoveCompDataが見つかりません");
                 return;
             }
 
-            Vector3 currentPos = UnityObjectRegistry.GetPosition(targetMonoId);
-            float distance = Vector3.Distance(currentPos, data.Destination);
+            var currentPos = UnityObjectRegistry.GetPosition(this.targetMonoId);
+            var distance = Vector3.Distance(currentPos, data.Destination);
 
-            Debug.Log($"MoveCompTester: MonoId {targetMonoId} の状態\n" +
+            Debug.Log($"MoveCompTester: MonoId {this.targetMonoId} の状態\n" +
                      $"現在位置: {currentPos}\n" +
                      $"目的地: {data.Destination}\n" +
                      $"距離: {distance:F2}\n" +
@@ -120,9 +120,9 @@ namespace NipaGameKit
         [ContextMenu("目的地を相対位置で設定")]
         public void SetDestinationRelative()
         {
-            Vector3 currentPos = UnityObjectRegistry.GetPosition(targetMonoId);
-            destination = currentPos + destination;
-            ExecuteMove();
+            var currentPos = UnityObjectRegistry.GetPosition(this.targetMonoId);
+            this.destination = currentPos + this.destination;
+            this.ExecuteMove();
         }
 
         private void OnDrawGizmos()
@@ -134,16 +134,16 @@ namespace NipaGameKit
 
             // 目的地を表示
             Gizmos.color = Color.yellow;
-            Gizmos.DrawWireSphere(destination, 0.5f);
-            Gizmos.DrawLine(transform.position, destination);
+            Gizmos.DrawWireSphere(this.destination, 0.5f);
+            Gizmos.DrawLine(this.transform.position, this.destination);
 
             // ターゲットの現在位置を表示
-            if (CompDataCollection<MoveCompData>.HasData(targetMonoId))
+            if (CompDataCollection<MoveCompData>.HasData(this.targetMonoId))
             {
-                Vector3 targetPos = UnityObjectRegistry.GetPosition(targetMonoId);
+                var targetPos = UnityObjectRegistry.GetPosition(this.targetMonoId);
                 Gizmos.color = Color.green;
                 Gizmos.DrawWireSphere(targetPos, 0.3f);
-                Gizmos.DrawLine(targetPos, destination);
+                Gizmos.DrawLine(targetPos, this.destination);
             }
         }
     }

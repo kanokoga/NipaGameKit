@@ -32,41 +32,41 @@ namespace NipaGameKit
         /// </summary>
         public void Init(int monoId)
         {
-            MonoId = monoId;
+            this.MonoId = monoId;
 
             // Transformを登録
-            UnityObjectRegistry.Register(monoId, transform);
+            UnityObjectRegistry.Register(monoId, this.transform);
 
             // データを作成して登録
-            var data = CreateData(monoId);
+            var data = this.CreateData(monoId);
             data.MonoId = monoId;
-            data.IsActive = enabled;
-            SyncToData(ref data);
+            data.IsActive = this.enabled;
+            this.SyncToData(ref data);
             CompDataCollection<TData>.Add(monoId, data);
         }
 
         protected virtual void OnEnable()
         {
-            if (MonoId > 0)
+            if (this.MonoId > 0)
             {
-                CompDataCollection<TData>.SetActive(MonoId, true);
+                CompDataCollection<TData>.SetActive(this.MonoId, true);
             }
         }
 
         protected virtual void OnDisable()
         {
-            if (MonoId > 0)
+            if (this.MonoId > 0)
             {
-                CompDataCollection<TData>.SetActive(MonoId, false);
+                CompDataCollection<TData>.SetActive(this.MonoId, false);
             }
         }
 
         protected virtual void OnDestroy()
         {
-            if (MonoId > 0)
+            if (this.MonoId > 0)
             {
-                CompDataCollection<TData>.Remove(MonoId);
-                UnityObjectRegistry.Unregister(MonoId);
+                CompDataCollection<TData>.Remove(this.MonoId);
+                UnityObjectRegistry.Unregister(this.MonoId);
             }
         }
 
@@ -75,7 +75,7 @@ namespace NipaGameKit
         /// </summary>
         public bool TryGetData(out TData data)
         {
-            return CompDataCollection<TData>.TryGetData(MonoId, out data);
+            return CompDataCollection<TData>.TryGetData(this.MonoId, out data);
         }
 
         /// <summary>
@@ -83,7 +83,7 @@ namespace NipaGameKit
         /// </summary>
         public ref TData GetData()
         {
-            return ref CompDataCollection<TData>.GetData(MonoId);
+            return ref CompDataCollection<TData>.GetData(this.MonoId);
         }
     }
 }

@@ -21,7 +21,7 @@ namespace NipaGameKit
 
         public T GetResource(string id)
         {
-            var resource = resources.Find(r => r.ids.Any(v => v == id));
+            var resource = this.resources.Find(r => r.ids.Any(v => v == id));
             if (resource == null)
             {
                 Debug.LogError($"Resource not found: {id}");

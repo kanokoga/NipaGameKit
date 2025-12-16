@@ -38,9 +38,9 @@ namespace NipaGameKit
                 return;
             }
 
-            Vector3 currentPos = GetPosition(monoId);
-            Vector3 direction = (data.Destination - currentPos);
-            float distance = direction.magnitude;
+            var currentPos = this.GetPosition(monoId);
+            var direction = (data.Destination - currentPos);
+            var distance = direction.magnitude;
 
             if (distance < 0.1f)
             {
@@ -53,7 +53,7 @@ namespace NipaGameKit
                 data.Velocity = direction * data.Speed;
                 
                 // 位置を更新
-                Vector3 newPos = currentPos + data.Velocity * deltaTime;
+                var newPos = currentPos + data.Velocity * deltaTime;
                 UnityObjectRegistry.SetPosition(monoId, newPos);
             }
         }
