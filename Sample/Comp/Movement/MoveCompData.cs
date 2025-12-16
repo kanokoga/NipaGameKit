@@ -20,7 +20,7 @@ namespace NipaGameKit
     /// <summary>
     /// 移動コンポーネントのSystem（データを処理するロジック）
     /// </summary>
-    public class MoveCompSystem : CompSystem<MoveCompData>
+    public class MoveCompDataSystem : CompDataSystem<MoveCompData>
     {
         public override void Update(float time, float deltaTime)
         {

@@ -9,7 +9,7 @@ namespace NipaGameKit
     /// Systemの管理クラス
     /// 型ごとにSystemインスタンスを保持し、更新を管理
     /// </summary>
-    public class CompSystemsUpdater : SingletonMonoBehaviour<CompSystemsUpdater>
+    public class CompDataSystemsUpdater : SingletonMonoBehaviour<CompDataSystemsUpdater>
     {
         private Dictionary<Type, object> _systems = new Dictionary<Type, object>();
         private List<ISystemUpdater> _updaters = new List<ISystemUpdater>();
@@ -18,25 +18,25 @@ namespace NipaGameKit
         /// <summary>
         /// Systemを登録
         /// </summary>
-        public void RegisterSystem<TData>(CompSystem<TData> system) where TData : struct, ICompData
+        public void RegisterSystem<TData>(CompDataSystem<TData> dataSystem) where TData : struct, ICompData
         {
             Type type = typeof(TData);
             if (!_systems.ContainsKey(type))
             {
-                _systems[type] = system;
-                _updaters.Add(new SystemUpdater<TData>(system));
+                _systems[type] = dataSystem;
+                _updaters.Add(new SystemUpdater<TData>(dataSystem));
             }
         }
 
         /// <summary>
         /// Systemを取得
         /// </summary>
-        public CompSystem<TData> GetSystem<TData>() where TData : struct, ICompData
+        public CompDataSystem<TData> GetSystem<TData>() where TData : struct, ICompData
         {
             Type type = typeof(TData);
             if (_systems.TryGetValue(type, out object system))
             {
-                return (CompSystem<TData>)system;
+                return (CompDataSystem<TData>)system;
             }
             return null;
         }
@@ -74,16 +74,16 @@ namespace NipaGameKit
 
         private class SystemUpdater<TData> : ISystemUpdater where TData : struct, ICompData
         {
-            private CompSystem<TData> _system;
+            private CompDataSystem<TData> dataSystem;
 
-            public SystemUpdater(CompSystem<TData> system)
+            public SystemUpdater(CompDataSystem<TData> dataSystem)
             {
-                _system = system;
+                this.dataSystem = dataSystem;
             }
 
             public void Update(float time, float deltaTime)
             {
-                _system.Update(time, deltaTime);
+                this.dataSystem.Update(time, deltaTime);
             }
         }
     }

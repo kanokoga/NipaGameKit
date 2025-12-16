@@ -7,8 +7,8 @@ namespace NipaGameKit
     {
         private void Awake()
         {
-            var moveCompSystem = new MoveCompSystem();
-            CompSystemsUpdater.Instance.RegisterSystem(moveCompSystem);
+            var moveCompSystem = new MoveCompDataSystem();
+            CompDataSystemsUpdater.Instance.RegisterSystem(moveCompSystem);
         }
     }
 }

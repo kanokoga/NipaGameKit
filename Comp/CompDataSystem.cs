@@ -7,7 +7,7 @@ namespace NipaGameKit
     /// コンポーネントデータを処理するSystem基底クラス
     /// ECS的なアプローチでロジックを分離
     /// </summary>
-    public abstract class CompSystem<TData> where TData : struct, ICompData
+    public abstract class CompDataSystem<TData> where TData : struct, ICompData
     {
         /// <summary>
         /// システムの更新処理
