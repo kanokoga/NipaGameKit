@@ -8,7 +8,7 @@ namespace NipaGameKit
 {
     /// <summary>
     /// データ構造ベースのコンポーネントシステムのエントリーポイント
-    /// CompDataProviderを自動的に検出して初期化
+    /// Compを自動的に検出して初期化
     /// </summary>
     public class NipaEntity : MonoBehaviour
     {
@@ -25,8 +25,8 @@ namespace NipaGameKit
 
             GlobalMonoId++;
 
-            // すべてのCompDataProviderを取得して初期化
-            // CompDataProvider<T>を継承しているコンポーネントを検出
+            // すべてのCompを取得して初期化
+            // Comp<T>を継承しているコンポーネントを検出
             this.comps = this.GetComponents<MonoBehaviour>()
                 .Where(comp => this.IsCompDataProvider(comp))
                 .OrderBy(comp => this.GetInitOrder(comp))
@@ -34,27 +34,17 @@ namespace NipaGameKit
 
             foreach (var provider in this.comps)
             {
-                // リフレクションでInitを呼び出す
-                var initMethod = provider.GetType().GetMethod("Init", new[] { typeof(int) });
-                if (initMethod != null)
+                // インターフェースを使って直接呼び出し
+                if (provider is IComp comp)
                 {
-                    initMethod.Invoke(provider, new object[] { this.EntityId });
+                    comp.Init(this.EntityId);
                 }
             }
         }
 
         private bool IsCompDataProvider(MonoBehaviour comp)
         {
-            var type = comp.GetType();
-            while (type != null && type != typeof(MonoBehaviour))
-            {
-                if (type.IsGenericType && type.GetGenericTypeDefinition() == typeof(Comp<>))
-                {
-                    return true;
-                }
-                type = type.BaseType;
-            }
-            return false;
+            return comp is IComp;
         }
 
         private int GetInitOrder(MonoBehaviour comp)
@@ -78,7 +68,7 @@ namespace NipaGameKit
 
         protected virtual void OnDestroy()
         {
-            // CompRegistryから削除（各CompDataProviderのOnDestroyでも削除されるが念のため）
+            // CompRegistryから削除（各CompのOnDestroyでも削除されるが念のため）
             UnityObjectRegistry.Unregister(this.EntityId);
         }
     }

@@ -28,18 +28,18 @@
 ```csharp
 public interface ICompData
 {
-    int MonoId { get; set; }
+    int EntityId { get; set; }
     bool IsActive { get; set; }
 }
 ```
 
-#### `CompGroupData<TData>`
+#### `CompDataCollection<TData>`
 SoA構造でデータを保持する静的クラス
 - データを配列で管理（連続メモリ）
-- MonoIdからO(1)でデータにアクセス
+- EntityIdからO(1)でデータにアクセス
 - アクティブなデータのみを効率的にループ
 
-#### `CompSystem<TData>`
+#### `CompDataSystem<TData>`
 データを処理するSystem基底クラス
 - データの更新ロジックを実装
 - バッチ処理でパフォーマンスを最適化
@@ -53,15 +53,15 @@ SoA構造でデータを保持する静的クラス
 
 ### 削除されたクラス
 - `CompMonoBase` - データ構造ベースに完全移行
-- `CompGroup<T>` - `CompGroupData<TData>`に置き換え
-- `CompDataBridge` - 不要（直接`CompDataProvider`を使用）
+- `CompGroup<T>` - `CompDataCollection<TData>`に置き換え
+- `CompDataBridge` - 不要（直接`Comp`を使用）
 
 ### 新しく追加されたクラス
-- `CompDataProvider<TData>` - データ構造を提供するMonoBehaviour基底クラス
-- `CompRegistry` - MonoIdとUnityオブジェクト（Transform）のマッピング
-- `CompGroupData<TData>` - SoA構造でデータを保持
-- `CompSystem<TData>` - データを処理するSystem基底クラス
-- `CompSystemManager` - Systemの管理と自動更新
+- `Comp<TData>` - データ構造を提供するMonoBehaviour基底クラス
+- `UnityObjectRegistry` - EntityIdとUnityオブジェクト（Transform）のマッピング
+- `CompDataCollection<TData>` - SoA構造でデータを保持
+- `CompDataSystem<TData>` - データを処理するSystem基底クラス
+- `CompDataSystemCollection` - Systemの管理と自動更新
 
 ## 使用例
 
@@ -70,9 +70,9 @@ SoA構造でデータを保持する静的クラス
 ```csharp
 public struct MoveCompData : ICompData
 {
-    public int MonoId { get; set; }
+    public int EntityId { get; set; }
     public bool IsActive { get; set; }
-    
+
     public Vector3 Destination;
     public bool HasArrived;
     public Vector3 Velocity;
@@ -83,18 +83,18 @@ public struct MoveCompData : ICompData
 ### 2. Systemの実装
 
 ```csharp
-public class MoveCompSystem : CompSystem<MoveCompData>
+public class MoveCompSystem : CompDataSystem<MoveCompData>
 {
-    protected override void UpdateData(int monoId, ref MoveCompData data, float time, float deltaTime)
+    protected override void UpdateData(int entityId, ref MoveCompData data, float time, float deltaTime)
     {
         if (data.HasArrived || !data.IsActive) return;
-        
-        Vector3 currentPos = CompRegistry.GetPosition(monoId);
+
+        Vector3 currentPos = UnityObjectRegistry.GetPosition(entityId);
         Vector3 direction = (data.Destination - currentPos).normalized;
         data.Velocity = direction * data.Speed;
-        
+
         // 位置を更新
-        CompRegistry.SetPosition(monoId, currentPos + data.Velocity * deltaTime);
+        UnityObjectRegistry.SetPosition(entityId, currentPos + data.Velocity * deltaTime);
     }
 }
 ```
@@ -102,15 +102,15 @@ public class MoveCompSystem : CompSystem<MoveCompData>
 ### 3. データプロバイダーの実装
 
 ```csharp
-public class MoveCompProvider : CompDataProvider<MoveCompData>
+public class MoveCompProvider : Comp<MoveCompData>
 {
     [SerializeField] private float speed = 5.0f;
 
-    protected override MoveCompData CreateData(int monoId)
+    protected override MoveCompData CreateData(int entityId)
     {
         return new MoveCompData
         {
-            MonoId = monoId,
+            EntityId = entityId,
             IsActive = enabled,
             Destination = transform.position,
             HasArrived = true,
@@ -131,11 +131,11 @@ public class MoveCompProvider : CompDataProvider<MoveCompData>
 ### 4. Systemの登録
 
 ```csharp
-// ComponentUpdaterのAwakeで登録
+// CompDataSystemCollectionのAwakeで登録
 private void Awake()
 {
     var moveCompSystem = new MoveCompSystem();
-    CompSystemManager.Instance.RegisterSystem<MoveCompData>(moveCompSystem);
+    CompDataSystemCollection.Instance.RegisterSystem<MoveCompData>(moveCompSystem);
 }
 ```
 
@@ -152,7 +152,7 @@ private void Awake()
 - 更新処理: O(n) × キャッシュミス
 - メモリ使用量: Dictionary + List（2倍）
 
-### 新しいアプローチ（CompGroupData）
+### 新しいアプローチ（CompDataCollection）
 - メモリアクセス: 連続（キャッシュフレンドリー）
 - 更新処理: O(n) × キャッシュヒット
 - メモリ使用量: 配列のみ（効率的）
@@ -161,33 +161,33 @@ private void Awake()
 
 ### 既存コードからの移行
 
-1. **CompMonoBase → CompDataProvider**
+1. **CompMonoBase → Comp**
    ```csharp
    // 旧
    public class MyComp : CompMonoBase { }
    
    // 新
-   public class MyComp : CompDataProvider<MyCompData> { }
+   public class MyComp : Comp<MyCompData> { }
    ```
 
-2. **CompGroup → CompGroupData**
+2. **CompGroup → CompDataCollection**
    ```csharp
    // 旧
-   CompGroup<MyComp>.GetComponent(monoId);
-   
+   CompGroup<MyComp>.GetComponent(entityId);
+
    // 新
-   CompGroupData<MyCompData>.GetData(monoId);
+   CompDataCollection<MyCompData>.GetData(entityId);
    ```
 
 3. **UpdateComponent → System**
    ```csharp
    // 旧: CompMonoBaseのUpdateComponent
    public override void UpdateComponent(float time, float deltaTime) { }
-   
-   // 新: CompSystemのUpdateData
-   public class MyCompSystem : CompSystem<MyCompData>
+
+   // 新: CompDataSystemのUpdateData
+   public class MyCompSystem : CompDataSystem<MyCompData>
    {
-       protected override void UpdateData(int monoId, ref MyCompData data, float time, float deltaTime) { }
+       protected override void UpdateData(int entityId, ref MyCompData data, float time, float deltaTime) { }
    }
    ```
 
@@ -195,10 +195,10 @@ private void Awake()
    ```csharp
    // 旧
    this._transform.position
-   
+
    // 新
-   CompRegistry.GetPosition(monoId)
-   CompRegistry.SetPosition(monoId, position)
+   UnityObjectRegistry.GetPosition(entityId)
+   UnityObjectRegistry.SetPosition(entityId, position)
    ```
 
 ## 注意事項

@@ -10,22 +10,22 @@
 
 ```csharp
 // 基本的な移動命令
-MoveCommandQueue.EnqueueMove(monoId, new Vector3(10, 0, 10));
+MoveCommandQueue.EnqueueMove(entityId, new Vector3(10, 0, 10));
 
 // 速度を指定した移動命令
-MoveCommandQueue.EnqueueMove(monoId, new Vector3(10, 0, 10), speed: 8.0f);
+MoveCommandQueue.EnqueueMove(entityId, new Vector3(10, 0, 10), speed: 8.0f);
 
 // 複数の移動命令を順番に実行
-MoveCommandQueue.EnqueueMove(monoId, new Vector3(5, 0, 5));
-MoveCommandQueue.EnqueueMove(monoId, new Vector3(10, 0, 10));
-MoveCommandQueue.EnqueueMove(monoId, new Vector3(15, 0, 15));
+MoveCommandQueue.EnqueueMove(entityId, new Vector3(5, 0, 5));
+MoveCommandQueue.EnqueueMove(entityId, new Vector3(10, 0, 10));
+MoveCommandQueue.EnqueueMove(entityId, new Vector3(15, 0, 15));
 // → 順番に実行される
 ```
 
 ### 2. 停止命令を出す
 
 ```csharp
-MoveCommandQueue.EnqueueStop(monoId);
+MoveCommandQueue.EnqueueStop(entityId);
 ```
 
 ### 3. MoveCompProviderから使用
@@ -46,7 +46,7 @@ moveComp.Stop();
 ## コマンドキューの動作
 
 1. **コマンドの追加**: `EnqueueMove()`や`EnqueueStop()`でコマンドをキューに追加
-2. **コマンドの処理**: `MoveCompSystem`の`Update()`で自動的に処理される
+2. **コマンドの処理**: `MoveCompDataSystem`の`Update()`で自動的に処理される
 3. **順次実行**: キューに入った順番に1つずつ処理される
 4. **到着判定**: 1つのコマンドが完了（到着）すると、次のコマンドが自動的に開始される
 
@@ -66,12 +66,12 @@ CommandQueue<CommandQueue.MoveCommand>.Clear();
 
 ```csharp
 // パトロールポイントを順番に設定
-int guardMonoId = 123;
-MoveCommandQueue.EnqueueMove(guardMonoId, new Vector3(0, 0, 0));
-MoveCommandQueue.EnqueueMove(guardMonoId, new Vector3(10, 0, 0));
-MoveCommandQueue.EnqueueMove(guardMonoId, new Vector3(10, 0, 10));
-MoveCommandQueue.EnqueueMove(guardMonoId, new Vector3(0, 0, 10));
-MoveCommandQueue.EnqueueMove(guardMonoId, new Vector3(0, 0, 0));  // 開始地点に戻る
+int guardEntityId = 123;
+MoveCommandQueue.EnqueueMove(guardEntityId, new Vector3(0, 0, 0));
+MoveCommandQueue.EnqueueMove(guardEntityId, new Vector3(10, 0, 0));
+MoveCommandQueue.EnqueueMove(guardEntityId, new Vector3(10, 0, 10));
+MoveCommandQueue.EnqueueMove(guardEntityId, new Vector3(0, 0, 10));
+MoveCommandQueue.EnqueueMove(guardEntityId, new Vector3(0, 0, 0));  // 開始地点に戻る
 ```
 
 ### 緊急停止
@@ -79,20 +79,20 @@ MoveCommandQueue.EnqueueMove(guardMonoId, new Vector3(0, 0, 0));  // 開始地�
 ```csharp
 // 現在のコマンドをキャンセルして停止
 CommandQueue<CommandQueue.MoveCommand>.Clear();  // キューをクリア
-MoveCommandQueue.EnqueueStop(monoId);  // 停止命令
+MoveCommandQueue.EnqueueStop(entityId);  // 停止命令
 ```
 
 ### 速度変更付き移動
 
 ```csharp
 // 通常速度で移動
-MoveCommandQueue.EnqueueMove(monoId, new Vector3(5, 0, 5));
+MoveCommandQueue.EnqueueMove(entityId, new Vector3(5, 0, 5));
 
 // 高速で移動
-MoveCommandQueue.EnqueueMove(monoId, new Vector3(10, 0, 10), speed: 15.0f);
+MoveCommandQueue.EnqueueMove(entityId, new Vector3(10, 0, 10), speed: 15.0f);
 
 // 低速で移動
-MoveCommandQueue.EnqueueMove(monoId, new Vector3(15, 0, 15), speed: 2.0f);
+MoveCommandQueue.EnqueueMove(entityId, new Vector3(15, 0, 15), speed: 2.0f);
 ```
 
 ## メリット
@@ -104,7 +104,7 @@ MoveCommandQueue.EnqueueMove(monoId, new Vector3(15, 0, 15), speed: 2.0f);
 
 ## 注意点
 
-- コマンドは`MoveCompSystem`の`Update()`で処理されるため、1フレームに1つずつ処理されます
+- コマンドは`MoveCompDataSystem`の`Update()`で処理されるため、1フレームに1つずつ処理されます
 - キューサイズの上限は100（`CommandQueue<TCommand>.MaxQueueSize`で変更可能）
 - キューが満杯の場合、新しいコマンドは破棄されます
 

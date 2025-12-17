@@ -6,10 +6,10 @@
 
 1. **GameObjectを作成**
 2. **`NipaEntity`コンポーネントを追加**
-   - これがエントリーポイントで、すべての`CompDataProvider`を自動検出・初期化します
+   - これがエントリーポイントで、すべての`Comp`を自動検出・初期化します
 3. **`MoveCompProvider`コンポーネントを追加**
    - Inspectorで`Speed`を設定可能
-   - 実際の移動処理は`MoveCompSystem`が行います
+   - 実際の移動処理は`MoveCompDataSystem`が行います
 
 ### 2. Systemの登録（シーンに1回だけ）
 
@@ -25,8 +25,8 @@
 
 ```csharp
 // どこかで1回だけ実行（例：GameManagerなど）
-var moveCompSystem = new MoveCompSystem();
-CompSystemManager.Instance.RegisterSystem<MoveCompData>(moveCompSystem);
+var moveCompSystem = new MoveCompDataSystem();
+CompDataSystemCollection.Instance.RegisterSystem<MoveCompData>(moveCompSystem);
 ```
 
 ### 3. コードから使用する
@@ -58,13 +58,13 @@ data.Speed = 10.0f;
 data.HasArrived = false;
 ```
 
-#### MonoIdからデータにアクセス
+#### EntityIdからデータにアクセス
 
 ```csharp
-// 他のスクリプトから、MonoIdでデータにアクセス
-int targetMonoId = 123;
+// 他のスクリプトから、EntityIdでデータにアクセス
+int targetEntityId = 123;
 
-if (CompGroupData<MoveCompData>.TryGetData(targetMonoId, out MoveCompData data))
+if (CompDataCollection<MoveCompData>.TryGetData(targetEntityId, out MoveCompData data))
 {
     // データを読み取り
     Vector3 destination = data.Destination;
@@ -72,9 +72,9 @@ if (CompGroupData<MoveCompData>.TryGetData(targetMonoId, out MoveCompData data))
 }
 
 // または、参照で変更
-if (CompGroupData<MoveCompData>.HasData(targetMonoId))
+if (CompDataCollection<MoveCompData>.HasData(targetEntityId))
 {
-    ref var data = ref CompGroupData<MoveCompData>.GetData(targetMonoId);
+    ref var data = ref CompDataCollection<MoveCompData>.GetData(targetEntityId);
     data.Destination = new Vector3(10, 0, 10);
 }
 ```
@@ -83,7 +83,7 @@ if (CompGroupData<MoveCompData>.HasData(targetMonoId))
 
 ```csharp
 // すべてのMoveCompDataを取得
-MoveCompData[] allMoveComps = CompGroupData<MoveCompData>.GetAllData();
+MoveCompData[] allMoveComps = CompDataCollection<MoveCompData>.GetAllData();
 
 foreach (var data in allMoveComps)
 {
@@ -96,12 +96,12 @@ foreach (var data in allMoveComps)
 
 ### 4. Systemのカスタマイズ
 
-`MoveCompSystem`を継承してカスタムロジックを追加：
+`MoveCompDataSystem`を継承してカスタムロジックを追加：
 
 ```csharp
-public class CustomMoveCompSystem : MoveCompSystem
+public class CustomMoveCompSystem : MoveCompDataSystem
 {
-    protected override void UpdateData(int monoId, ref MoveCompData data, float time, float deltaTime)
+    protected override void UpdateData(int entityId, ref MoveCompData data, float time, float deltaTime)
     {
         // 基底クラスの処理を実行
         base.UpdateData(monoId, ref data, time, deltaTime);
@@ -123,7 +123,7 @@ public class CustomMoveCompSystem : MoveCompSystem
 ```csharp
 public struct HealthCompData : ICompData
 {
-    public int MonoId { get; set; }
+    public int EntityId { get; set; }
     public bool IsActive { get; set; }
     
     public float MaxHealth;
@@ -135,9 +135,9 @@ public struct HealthCompData : ICompData
 #### ステップ2: Systemを実装
 
 ```csharp
-public class HealthCompSystem : CompSystem<HealthCompData>
+public class HealthCompSystem : CompDataSystem<HealthCompData>
 {
-    protected override void UpdateData(int monoId, ref HealthCompData data, float time, float deltaTime)
+    protected override void UpdateData(int entityId, ref HealthCompData data, float time, float deltaTime)
     {
         if (data.CurrentHealth <= 0 && !data.IsDead)
         {
@@ -151,15 +151,15 @@ public class HealthCompSystem : CompSystem<HealthCompData>
 #### ステップ3: データプロバイダーを実装
 
 ```csharp
-public class HealthCompProvider : CompDataProvider<HealthCompData>
+public class HealthCompProvider : Comp<HealthCompData>
 {
     [SerializeField] private float maxHealth = 100.0f;
 
-    protected override HealthCompData CreateData(int monoId)
+    protected override HealthCompData CreateData(int entityId)
     {
         return new HealthCompData
         {
-            MonoId = monoId,
+            EntityId = entityId,
             IsActive = enabled,
             MaxHealth = maxHealth,
             CurrentHealth = maxHealth,
@@ -178,20 +178,20 @@ public class HealthCompProvider : CompDataProvider<HealthCompData>
 #### ステップ4: Systemを登録
 
 ```csharp
-// ComponentUpdaterのAwakeで
+// CompDataSystemCollectionのAwakeで
 var healthCompSystem = new HealthCompSystem();
-CompSystemManager.Instance.RegisterSystem<HealthCompData>(healthCompSystem);
+CompDataSystemCollection.Instance.RegisterSystem<HealthCompData>(healthCompSystem);
 ```
 
 ### 6. パフォーマンスのメリット
 
 - **連続メモリアクセス**: データが配列で保持されるため、キャッシュ効率が良い
 - **バッチ処理**: Systemがすべてのデータを一括処理
-- **O(1)アクセス**: MonoIdから直接データにアクセス可能
+- **O(1)アクセス**: EntityIdから直接データにアクセス可能
 
 ### 7. 注意点
 
 - `NipaEntity`は必ずGameObjectにアタッチする必要があります
-- `CompDataProvider`は`NipaEntity`と同じGameObjectにアタッチする必要があります
-- Systemはシーンに1回だけ登録してください（`ComponentUpdater`で自動管理）
+- `Comp`は`NipaEntity`と同じGameObjectにアタッチする必要があります
+- Systemはシーンに1回だけ登録してください（`CompDataSystemCollection`で管理）
 
