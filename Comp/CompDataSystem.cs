@@ -20,9 +20,9 @@ namespace NipaGameKit
             CompDataCollection<TData>.UpdateActiveData(this.UpdateDataCallback);
         }
 
-        private void UpdateDataCallback(int monoId, ref TData data)
+        private void UpdateDataCallback(int entityId, ref TData data)
         {
-            this.UpdateData(monoId, ref data, this._currentTime, this._currentDeltaTime);
+            this.UpdateData(entityId, ref data, this._currentTime, this._currentDeltaTime);
         }
 
         private float _currentTime;

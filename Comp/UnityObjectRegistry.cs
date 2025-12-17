@@ -9,65 +9,74 @@ namespace NipaGameKit
     /// </summary>
     public static class UnityObjectRegistry
     {
-        private static Dictionary<int, Transform> _monoIdToTransform = new Dictionary<int, Transform>();
-        private static Dictionary<int, GameObject> _monoIdToGameObject = new Dictionary<int, GameObject>();
+        private static Dictionary<int, Transform> EntityIdToTransform = new Dictionary<int, Transform>();
+        private static Dictionary<int, GameObject> EntityIdToGameObject = new Dictionary<int, GameObject>();
 
-        public static void Register(int monoId, Transform transform)
+        
+
+        public static void Register(int entityId, Transform transform)
         {
-            _monoIdToTransform[monoId] = transform;
-            _monoIdToGameObject[monoId] = transform.gameObject;
+            EntityIdToTransform[entityId] = transform;
+            EntityIdToGameObject[entityId] = transform.gameObject;
         }
 
-        public static void Unregister(int monoId)
+        public static void Unregister(int entityId)
         {
-            _monoIdToTransform.Remove(monoId);
-            _monoIdToGameObject.Remove(monoId);
+            if(EntityIdToTransform.ContainsKey(entityId))
+            {
+                EntityIdToTransform.Remove(entityId);
+            }
+
+            if(EntityIdToGameObject.ContainsKey(entityId))
+            {
+                EntityIdToGameObject.Remove(entityId);
+            }
         }
 
-        public static Transform GetTransform(int monoId)
+        public static Transform GetTransform(int entityId)
         {
-            return _monoIdToTransform.TryGetValue(monoId, out var transform) ? transform : null;
+            return EntityIdToTransform.TryGetValue(entityId, out var transform) ? transform : null;
         }
 
-        public static GameObject GetGameObject(int monoId)
+        public static GameObject GetGameObject(int entityId)
         {
-            return _monoIdToGameObject.TryGetValue(monoId, out var go) ? go : null;
+            return EntityIdToGameObject.TryGetValue(entityId, out var go) ? go : null;
         }
 
-        public static Vector3 GetPosition(int monoId)
+        public static Vector3 GetPosition(int entityId)
         {
-            var transform = GetTransform(monoId);
+            var transform = GetTransform(entityId);
             return transform != null ? transform.position : Vector3.zero;
         }
 
-        public static Quaternion GetRotation(int monoId)
+        public static Quaternion GetRotation(int entityId)
         {
-            var transform = GetTransform(monoId);
+            var transform = GetTransform(entityId);
             return transform != null ? transform.rotation : Quaternion.identity;
         }
 
-        public static void SetPosition(int monoId, Vector3 position)
+        public static void SetPosition(int entityId, Vector3 position)
         {
-            var transform = GetTransform(monoId);
+            var transform = GetTransform(entityId);
             if (transform != null)
             {
                 transform.position = position;
             }
         }
 
-        public static void SetRotation(int monoId, Quaternion rotation)
+        public static void SetRotation(int entityId, Quaternion rotation)
         {
-            var transform = GetTransform(monoId);
+            var transform = GetTransform(entityId);
             if (transform != null)
             {
                 transform.rotation = rotation;
             }
         }
 
-        public static void Clear()
+        private static void Clear()
         {
-            _monoIdToTransform.Clear();
-            _monoIdToGameObject.Clear();
+            EntityIdToTransform.Clear();
+            EntityIdToGameObject.Clear();
         }
     }
 }

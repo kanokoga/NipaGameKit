@@ -14,7 +14,7 @@ namespace NipaGameKit
     {
         private static int GlobalMonoId = 0;
         public int EntityId { get; private set; }
-        private MonoBehaviour[] _dataProviders;
+        private MonoBehaviour[] comps;
 
         private void Awake()
         {
@@ -27,12 +27,12 @@ namespace NipaGameKit
 
             // すべてのCompDataProviderを取得して初期化
             // CompDataProvider<T>を継承しているコンポーネントを検出
-            this._dataProviders = this.GetComponents<MonoBehaviour>()
+            this.comps = this.GetComponents<MonoBehaviour>()
                 .Where(comp => this.IsCompDataProvider(comp))
                 .OrderBy(comp => this.GetInitOrder(comp))
                 .ToArray();
 
-            foreach (var provider in this._dataProviders)
+            foreach (var provider in this.comps)
             {
                 // リフレクションでInitを呼び出す
                 var initMethod = provider.GetType().GetMethod("Init", new[] { typeof(int) });
