@@ -35,7 +35,7 @@ namespace NipaGameKit
         /// </summary>
         public void SetDestination(Vector3 destination)
         {
-            MoveCommandQueue.EnqueueMove(this.MonoId, destination);
+            MoveCommandQueue.EnqueueMove(this.EntityId, destination);
         }
 
         /// <summary>
@@ -43,7 +43,7 @@ namespace NipaGameKit
         /// </summary>
         public void SetDestination(Vector3 destination, float speed)
         {
-            MoveCommandQueue.EnqueueMove(this.MonoId, destination, speed);
+            MoveCommandQueue.EnqueueMove(this.EntityId, destination, speed);
         }
 
         /// <summary>
@@ -51,7 +51,7 @@ namespace NipaGameKit
         /// </summary>
         public void Stop()
         {
-            MoveCommandQueue.EnqueueStop(this.MonoId);
+            MoveCommandQueue.EnqueueStop(this.EntityId);
         }
 
         protected void OnDrawGizmosSelected()

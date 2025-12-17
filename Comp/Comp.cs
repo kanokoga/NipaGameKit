@@ -9,7 +9,7 @@ namespace NipaGameKit
     public abstract class Comp<TData> : MonoBehaviour
         where TData : struct, ICompData
     {
-        public int MonoId { get; private set; }
+        public int EntityId { get; private set; }
         public virtual int InitOrder => 0;
 
         /// <summary>
@@ -32,7 +32,7 @@ namespace NipaGameKit
         /// </summary>
         public void Init(int monoId)
         {
-            this.MonoId = monoId;
+            this.EntityId = monoId;
 
             // Transformを登録
             UnityObjectRegistry.Register(monoId, this.transform);
@@ -47,26 +47,26 @@ namespace NipaGameKit
 
         protected virtual void OnEnable()
         {
-            if (this.MonoId > 0)
+            if (this.EntityId > 0)
             {
-                CompDataCollection<TData>.SetActive(this.MonoId, true);
+                CompDataCollection<TData>.SetActive(this.EntityId, true);
             }
         }
 
         protected virtual void OnDisable()
         {
-            if (this.MonoId > 0)
+            if (this.EntityId > 0)
             {
-                CompDataCollection<TData>.SetActive(this.MonoId, false);
+                CompDataCollection<TData>.SetActive(this.EntityId, false);
             }
         }
 
         protected virtual void OnDestroy()
         {
-            if (this.MonoId > 0)
+            if (this.EntityId > 0)
             {
-                CompDataCollection<TData>.Remove(this.MonoId);
-                UnityObjectRegistry.Unregister(this.MonoId);
+                CompDataCollection<TData>.Remove(this.EntityId);
+                UnityObjectRegistry.Unregister(this.EntityId);
             }
         }
 
@@ -75,7 +75,7 @@ namespace NipaGameKit
         /// </summary>
         public bool TryGetData(out TData data)
         {
-            return CompDataCollection<TData>.TryGetData(this.MonoId, out data);
+            return CompDataCollection<TData>.TryGetData(this.EntityId, out data);
         }
 
         /// <summary>
@@ -83,7 +83,7 @@ namespace NipaGameKit
         /// </summary>
         public ref TData GetData()
         {
-            return ref CompDataCollection<TData>.GetData(this.MonoId);
+            return ref CompDataCollection<TData>.GetData(this.EntityId);
         }
     }
 }
