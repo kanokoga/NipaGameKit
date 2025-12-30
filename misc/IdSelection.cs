@@ -3,13 +3,14 @@ using System.Collections.Generic;
 
 namespace NipaGameKit
 {
-    public class MouseOnIdObject<T>
+    public class IdSelection<T>
     {
+        public const int InvalidId = -1;
         public static int MouseOveredId { get; private set; } = -1;
-        public static int MouseClickedId { get; private set; } = -1;
+        public static int SelectedId { get; private set; } = -1;
 
-        public static event Action OnMouseOverChanged = delegate { };
-        public static event Action OnMouseClicked = delegate { };
+        public static event Action OnMouseOverIdChanged = delegate { };
+        public static event Action OnSelectedIdChanged = delegate { };
 
         private readonly MouseOnObject mouseOnObject;
         private readonly int identityId;
@@ -18,15 +19,21 @@ namespace NipaGameKit
         private bool allowClick = true;
 
 
+        public static void Deselect()
+        {
+            SelectedId = -1;
+            OnSelectedIdChanged.Invoke();
+        }
+
         public static void Dispose()
         {
             MouseOveredId = -1;
-            MouseClickedId = -1;
-            OnMouseOverChanged = delegate { };
-            OnMouseClicked = delegate { };
+            SelectedId = -1;
+            OnMouseOverIdChanged = delegate { };
+            OnSelectedIdChanged = delegate { };
         }
 
-        public MouseOnIdObject(MouseOnObject mouseOnObject, int identityId)
+        public IdSelection(MouseOnObject mouseOnObject, int identityId)
         {
             this.mouseOnObject = mouseOnObject;
             this.identityId = identityId;
@@ -51,7 +58,7 @@ namespace NipaGameKit
                     if(this.allowMouseOver == true)
                     {
                         MouseOveredId = this.identityId;
-                        OnMouseOverChanged.Invoke();
+                        OnMouseOverIdChanged.Invoke();
                     }
 
                     break;
@@ -59,15 +66,15 @@ namespace NipaGameKit
                     if(MouseOveredId == this.identityId)
                     {
                         MouseOveredId = -1;
-                        OnMouseOverChanged.Invoke();
+                        OnMouseOverIdChanged.Invoke();
                     }
 
                     break;
                 case MouseActionType.MouseClick:
                     if(this.allowClick == true)
                     {
-                        MouseClickedId = this.identityId;
-                        OnMouseClicked.Invoke();
+                        SelectedId = this.identityId;
+                        OnSelectedIdChanged.Invoke();
                     }
 
                     break;

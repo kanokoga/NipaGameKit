@@ -25,7 +25,7 @@ namespace NipaGameKit
             this.OnMouseAction(MouseActionType.MouseExit);
         }
 
-        private void OnMouseDown()
+        private void OnMouseUp()
         {
             this.OnMouseAction(MouseActionType.MouseClick);
         }
