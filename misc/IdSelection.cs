@@ -1,17 +1,20 @@
 using System;
 using System.Collections.Generic;
+using Unity.VisualScripting;
 
 namespace NipaGameKit
 {
     public class IdSelection<T>
     {
-        public const int InvalidId = -1;
+
         public static int MouseOveredId { get; private set; } = -1;
         public static int SelectedId { get; private set; } = -1;
+        private const int InvalidId = -1;
 
         public static event Action OnMouseOverIdChanged = delegate { };
         public static event Action OnSelectedIdChanged = delegate { };
 
+        private static bool IsInteractable = true;
         private readonly MouseOnObject mouseOnObject;
         private readonly int identityId;
         private bool isDisposed;
@@ -21,16 +24,32 @@ namespace NipaGameKit
 
         public static void Deselect()
         {
-            SelectedId = -1;
+            SelectedId = InvalidId;
             OnSelectedIdChanged.Invoke();
         }
 
         public static void Dispose()
         {
-            MouseOveredId = -1;
-            SelectedId = -1;
+            MouseOveredId = InvalidId;
+            SelectedId = InvalidId;
             OnMouseOverIdChanged = delegate { };
             OnSelectedIdChanged = delegate { };
+        }
+
+        public static bool HasSelection()
+            => SelectedId != InvalidId;
+
+        public static bool IsMouseOvered()
+            => MouseOveredId != InvalidId;
+
+        public static void SetInteractable(bool interactable)
+        {
+            IsInteractable = interactable;
+            if(IsInteractable == false)
+            {
+                MouseOveredId = InvalidId;
+                OnMouseOverIdChanged.Invoke();
+            }
         }
 
         public IdSelection(MouseOnObject mouseOnObject, int identityId)
@@ -52,6 +71,11 @@ namespace NipaGameKit
 
         private void OnMouseActionHandler(MouseActionType actionType)
         {
+            if(IsInteractable == false)
+            {
+                return;
+            }
+
             switch(actionType)
             {
                 case MouseActionType.MouseEnter:
