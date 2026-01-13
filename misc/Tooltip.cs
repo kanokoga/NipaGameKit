@@ -14,6 +14,7 @@ namespace NipaGameKit
         [SerializeField] private float loadDuration = 0.5f;
         [SerializeField] private TMP_Text tooltipText;
         [SerializeField] private Vector3 offset;
+        [SerializeField] private Vector3 loadingOffset;
         [SerializeField] private RectTransform rectTransform;
         [SerializeField] private RectTransform windowRectTransform;
         [SerializeField] private CanvasGroup canvasGroup;
@@ -29,7 +30,8 @@ namespace NipaGameKit
             this.gameObject.SetActive(active);
             if(active == true)
             {
-                this.loadingImage.gameObject.SetActive(false);
+                this.loadingImage.gameObject.SetActive(true);
+                this.loadingImage.fillAmount = 1f;
                 this.startPosition = Input.mousePosition.x;
                 this.startTime = Time.time;
                 this.canvasGroup.alpha = 0f;
@@ -58,6 +60,7 @@ namespace NipaGameKit
                     this.startTime = Time.time;
                     this.startPosition = Input.mousePosition.x;
                     this.canvasGroup.alpha = 0f;
+                    this.loadingImage.fillAmount = 1f;
                 }
 
                 var elapsed = Time.time - this.startTime;
@@ -70,7 +73,7 @@ namespace NipaGameKit
                 }
                 else if(elapsed > this.loadDelay)
                 {
-                    this.loadingImage.gameObject.SetActive(true);
+
                     var t = Mathf.Clamp01((elapsed - this.loadDelay) / this.loadDuration);
                     this.loadingImage.fillAmount = t;
                 }
@@ -78,7 +81,7 @@ namespace NipaGameKit
 
             var cursorPos = Input.mousePosition;
             this.rectTransform.position = cursorPos + this.offset;
-            this.loadingRectTransform.position = cursorPos;
+            this.loadingRectTransform.position = cursorPos + this.loadingOffset;
         }
 
         private IEnumerator LazyFitImageToText()
