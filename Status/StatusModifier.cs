@@ -39,7 +39,7 @@ namespace NipaGameKit.Statuses
                                 break;
                         }
 
-                        status.AddModifyInfo(modifier is Modifier<Context> mod ? mod.modifyInfo : "Modifier applied");
+                        status.AddModifyInfo(modifier.GetModifyInfo());
                     }
                 }
 

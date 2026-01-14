@@ -16,7 +16,7 @@ namespace NipaGameKit.Statuses.Samples
 
         public WeatherContext(WeatherType weather)
         {
-            CurrentWeather = weather;
+            this.CurrentWeather = weather;
         }
     }
 
@@ -26,12 +26,12 @@ namespace NipaGameKit.Statuses.Samples
 
         public WeatherCxtChecker(WeatherContext.WeatherType weather)
         {
-            requiredWeather = weather;
+            this.requiredWeather = weather;
         }
 
         public override bool Check(WeatherContext context)
         {
-            return context.CurrentWeather == requiredWeather;
+            return context.CurrentWeather == this.requiredWeather;
         }
     }
 
@@ -42,16 +42,15 @@ namespace NipaGameKit.Statuses.Samples
             var unitSpeedModify = new Modifier<WeatherContext>
                 (ModifierType.Multiplicative, 1.2f, new WeatherCxtChecker(WeatherContext.WeatherType.Sunny));
 
-            var currentContext = new WeatherContext(WeatherContext.WeatherType.Sunny);
-            bool isApplicable = unitSpeedModify.IsApplicable(currentContext);
-            Debug.Log($"Is the modifier applicable? {isApplicable}");
+            var weatherContext = new WeatherContext(WeatherContext.WeatherType.Sunny);
 
             var speedStatusType = "UnitSpeed";
             var unit99Speed = new Status(speedStatusType, 99, 10f);
-            var statusModifier = new StatusModifier();
 
+            var statusModifier = new StatusModifier();
             statusModifier.Add(speedStatusType, unitSpeedModify);
-            statusModifier.UpdateStatus(unit99Speed, currentContext);
+
+            statusModifier.UpdateStatus(unit99Speed, weatherContext);
         }
     }
 }

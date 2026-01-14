@@ -7,7 +7,7 @@ namespace NipaGameKit.Statuses
 {
     public class ContextCheckerBase<T> where T : Context
     {
-        public string conditionDescription;
+        public string ConditionDescription { get; protected set; }
 
         public virtual bool Check(T context)
         {
@@ -17,18 +17,29 @@ namespace NipaGameKit.Statuses
 
     public class AndChecker<T> : ContextCheckerBase<T> where T : Context
     {
-        private readonly List<ContextCheckerBase<T>> _checkers;
+        private readonly List<ContextCheckerBase<T>> checkers;
 
         public AndChecker(params ContextCheckerBase<T>[] checkers)
         {
-            _checkers = new List<ContextCheckerBase<T>>(checkers);
-            // 説明文を自動合成する
-            conditionDescription = string.Join(" かつ ", _checkers.Select(c => c.conditionDescription));
+            this.checkers = new List<ContextCheckerBase<T>>(checkers);
+            // Auto-generate description text
+            string fullDescription = string.Join(" and ", this.checkers.Select(c => c.ConditionDescription));
+
+            // Truncate description if too long
+            const int maxDescriptionLength = 100;
+            if (fullDescription.Length > maxDescriptionLength)
+            {
+                this.ConditionDescription = fullDescription.Substring(0, maxDescriptionLength - 3) + "...";
+            }
+            else
+            {
+                this.ConditionDescription = fullDescription;
+            }
         }
 
         public override bool Check(T context)
         {
-            return _checkers.All(c => c.Check(context));
+            return this.checkers.All(c => c.Check(context));
         }
     }
 
@@ -37,8 +48,11 @@ namespace NipaGameKit.Statuses
         ModifierType Type { get; }
         float Value { get; }
 
-        // 引数を共通の親クラス「Context」にして、内部で型判定させる
+        // Check if modifier is applicable using Context base class, with internal type checking
         bool IsApplicable(Context context);
+
+        // Get modifier information
+        string GetModifyInfo();
     }
 
     public enum ModifierType
@@ -51,7 +65,7 @@ namespace NipaGameKit.Statuses
     {
         public ModifierType Type { get; }
         public float Value { get; }
-        public string modifyInfo;
+        public string ModifyInfo;
         private ContextCheckerBase<T> contextChecker;
 
         public Modifier(ModifierType type, float value, ContextCheckerBase<T> contextChecker)
@@ -59,17 +73,23 @@ namespace NipaGameKit.Statuses
             this.Type = type;
             this.Value = value;
             this.contextChecker = contextChecker;
-            switch(this.Type)
+            this.ModifyInfo = GenerateModifyInfo(type, value, contextChecker.ConditionDescription);
+        }
+
+        private static string GenerateModifyInfo(ModifierType type, float value, string conditionDescription)
+        {
+            string signPrefix = value >= 0 ? "+" : "";
+            string conditionInfo = $"({conditionDescription})";
+
+            switch(type)
             {
                 case ModifierType.Additive:
-                    this.modifyInfo = $"{(value >= 0 ? "+" : "")}{value:0.#}({contextChecker.conditionDescription})";
-                    break;
+                    return $"{signPrefix}{value:0.#}{conditionInfo}";
                 case ModifierType.Multiplicative:
-                    this.modifyInfo =
-                        $"{(value >= 0 ? "+" : "")}{(value*100f):0.#}%({contextChecker.conditionDescription})";
-                    break;
+                    float percentageValue = value * 100f;
+                    return $"{signPrefix}{percentageValue:0.#}%{conditionInfo}";
                 default:
-                    throw new ArgumentOutOfRangeException();
+                    throw new ArgumentOutOfRangeException(nameof(type), type, "Unsupported modifier type");
             }
         }
 
@@ -81,6 +101,11 @@ namespace NipaGameKit.Statuses
             }
 
             return false;
+        }
+
+        public string GetModifyInfo()
+        {
+            return this.ModifyInfo;
         }
     }
 }
