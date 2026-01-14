@@ -3,24 +3,23 @@ using UnityEngine;
 
 namespace NipaGameKit.Statuses
 {
-    public class StatusModifier : MonoBehaviour
+    public class StatusModifier
     {
-        private Dictionary<string, List<IModifier>> modifiersByStatusId = new Dictionary<string, List<IModifier>>();
+        private Dictionary<string, List<IModifier>> modifiersByStatusType = new Dictionary<string, List<IModifier>>();
 
-
-        public void Add(string statusId, IModifier modifier)
+        public void Add(string statusType, IModifier modifier)
         {
-            if(!this.modifiersByStatusId.ContainsKey(statusId))
+            if(!this.modifiersByStatusType.ContainsKey(statusType))
             {
-                this.modifiersByStatusId[statusId] = new List<IModifier>();
+                this.modifiersByStatusType[statusType] = new List<IModifier>();
             }
 
-            this.modifiersByStatusId[statusId].Add(modifier);
+            this.modifiersByStatusType[statusType].Add(modifier);
         }
 
-        private void UpdateStatus(Status status, Context context)
+        public void UpdateStatus(Status status, Context context)
         {
-            if(this.modifiersByStatusId.TryGetValue(status.Id, out var modifiers))
+            if(this.modifiersByStatusType.TryGetValue(status.Type, out var modifiers))
             {
                 status.Reset();
                 var addValue = 0f;

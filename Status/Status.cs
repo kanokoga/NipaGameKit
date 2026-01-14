@@ -4,17 +4,20 @@ namespace NipaGameKit.Statuses
 {
     public class Status
     {
-        public string Id { get; private set; }
+        public string Type { get; private set; }
+        public int ID { get; set; }
         public float Value { get; private set; }
-        public float BaseValue{ get; private set; }
-        public string ModifyInfo{ get; private set; }
+        public float BaseValue { get; private set; }
+        public string ModifyInfo { get; private set; }
 
 
-        public Status(string id, float baseValue)
+        public Status(string type, int id, float baseValue)
         {
-            this.Id = id;
+            this.Type = type;
+            this.ID = id;
             this.BaseValue = baseValue;
             this.Value = baseValue;
+            this.ModifyInfo = string.Empty;
         }
 
         public void Reset()
@@ -25,7 +28,7 @@ namespace NipaGameKit.Statuses
 
         public void AddModifyInfo(string info)
         {
-            if (string.IsNullOrEmpty(this.ModifyInfo))
+            if(string.IsNullOrEmpty(this.ModifyInfo))
             {
                 this.ModifyInfo = info;
             }

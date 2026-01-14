@@ -45,6 +45,13 @@ namespace NipaGameKit.Statuses.Samples
             var currentContext = new WeatherContext(WeatherContext.WeatherType.Sunny);
             bool isApplicable = unitSpeedModify.IsApplicable(currentContext);
             Debug.Log($"Is the modifier applicable? {isApplicable}");
+
+            var speedStatusType = "UnitSpeed";
+            var unit99Speed = new Status(speedStatusType, 99, 10f);
+            var statusModifier = new StatusModifier();
+
+            statusModifier.Add(speedStatusType, unitSpeedModify);
+            statusModifier.UpdateStatus(unit99Speed, currentContext);
         }
     }
 }
