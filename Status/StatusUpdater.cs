@@ -3,11 +3,11 @@ using UnityEngine;
 
 namespace NipaGameKit.Statuses
 {
-    public class StatusModifier
+    public class StatusUpdater
     {
         private Dictionary<string, List<IModifier>> modifiersByStatusType = new Dictionary<string, List<IModifier>>();
 
-        public void Add(string statusType, IModifier modifier)
+        public void AddModifier(string statusType, IModifier modifier)
         {
             if(!this.modifiersByStatusType.ContainsKey(statusType))
             {

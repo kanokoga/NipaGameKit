@@ -1,14 +1,22 @@
+using System;
 using UnityEngine;
 
 namespace NipaGameKit.Statuses
 {
+    [Serializable]
     public class Status
     {
-        public string Type { get; private set; }
-        public int ID { get; set; }
-        public float Value { get; private set; }
-        public float BaseValue { get; private set; }
-        public string ModifyInfo { get; private set; }
+        public string Type { get => type; private set => type = value; }
+        public int ID { get => id; set => id = value; }
+        public float BaseValue { get => baseValue; private set => baseValue = value; }
+        public float Value { get => value; private set => this.value = value; }
+        public string ModifyInfo { get => modifyInfo; private set => modifyInfo = value; }
+
+        [SerializeField] private string type;
+        [SerializeField] private int id;
+        [SerializeField] private float baseValue;
+        [SerializeField,Tooltip("debug")] private float value;
+        [SerializeField,Tooltip("debug")] private string modifyInfo;
 
 
         public Status(string type, int id, float baseValue)
@@ -41,6 +49,11 @@ namespace NipaGameKit.Statuses
         public void SetValue(float newValue)
         {
             this.Value = newValue;
+        }
+
+        public void SetType(string newType)
+        {
+            this.Type = newType;
         }
     }
 }
