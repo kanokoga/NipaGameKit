@@ -2,25 +2,25 @@ using UnityEngine;
 
 namespace NipaGameKit.Statuses
 {
-    /// <summary>
-    /// Base class representing the application conditions for status modifiers
-    ///
-    /// This class itself has no implementation and is designed as an empty base class for extensibility.
-    /// In actual games, implement specific context classes that inherit from this class
-    /// and contain information that becomes the application conditions for modifiers,
-    /// such as weather, time, character status, etc.
-    ///
-    /// Example usage:
-    /// <code>
-    /// public class WeatherContext : Context
-    /// {
-    ///     public enum WeatherType { Sunny, Rainy, Snowy }
-    ///     public WeatherType CurrentWeather { get; private set; }
-    /// }
-    /// </code>
-    /// </summary>
     public class Context
     {
+        // 外部（Checkerなど）からはこれを呼ぶ
+        public T GetContext<T>() where T : Context
+        {
+            // 1. 共通処理：自分がその型なら即座に返す
+            if (this is T result)
+            {
+                return result;
+            }
 
+            // 2. 個別処理：自分の中に含まれるコンテキストを検索する
+            return this.SearchComponent<T>();
+        }
+
+        // 子クラスで「自分の中身」を探すロジックだけを書く
+        protected virtual T SearchComponent<T>() where T : Context
+        {
+            return null; // デフォルトでは何も持っていない
+        }
     }
 }

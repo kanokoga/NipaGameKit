@@ -27,7 +27,7 @@ namespace NipaGameKit.Statuses
 
                 foreach(var modifier in modifiers)
                 {
-                    if(modifier.IsApplicable(context))
+                    if(modifier.IsValid(context))
                     {
                         switch(modifier.Type)
                         {

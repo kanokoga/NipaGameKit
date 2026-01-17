@@ -55,5 +55,10 @@ namespace NipaGameKit.Statuses
         {
             this.Type = newType;
         }
+
+        public override string ToString()
+        {
+            return $"Status(Type: {this.Type}, ID: {this.ID}, BaseValue: {this.BaseValue}, Value: {this.Value}, ModifyInfo: {this.ModifyInfo})";
+        }
     }
 }

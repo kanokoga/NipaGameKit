@@ -1,57 +1,14 @@
 using System;
-using System.Collections.Generic;
-using UnityEngine;
-using System.Linq;
 
 namespace NipaGameKit.Statuses
 {
-    public class ContextCheckerBase<T> where T : Context
-    {
-        public string ConditionDescription { get; protected set; }
-
-        public virtual bool Check(T context)
-        {
-            return true;
-        }
-    }
-
-    public class AndChecker<T> : ContextCheckerBase<T> where T : Context
-    {
-        private readonly List<ContextCheckerBase<T>> checkers;
-
-        public AndChecker(params ContextCheckerBase<T>[] checkers)
-        {
-            this.checkers = new List<ContextCheckerBase<T>>(checkers);
-            // Auto-generate description text
-            string fullDescription = string.Join(" and ", this.checkers.Select(c => c.ConditionDescription));
-
-            // Truncate description if too long
-            const int maxDescriptionLength = 100;
-            if (fullDescription.Length > maxDescriptionLength)
-            {
-                this.ConditionDescription = fullDescription.Substring(0, maxDescriptionLength - 3) + "...";
-            }
-            else
-            {
-                this.ConditionDescription = fullDescription;
-            }
-        }
-
-        public override bool Check(T context)
-        {
-            return this.checkers.All(c => c.Check(context));
-        }
-    }
-
     public interface IModifier
     {
         ModifierType Type { get; }
         float Value { get; }
 
-        // Check if modifier is applicable using Context base class, with internal type checking
-        bool IsApplicable(Context context);
+        bool IsValid(Context context);
 
-        // Get modifier information
         string GetModifyInfo();
     }
 
@@ -93,11 +50,11 @@ namespace NipaGameKit.Statuses
             }
         }
 
-        public bool IsApplicable(Context context)
+        public bool IsValid(Context context)
         {
             if(context is T specificContext)
             {
-                return this.contextChecker.Check(specificContext);
+                return this.contextChecker.IsValid(specificContext);
             }
 
             return false;
