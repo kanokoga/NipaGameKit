@@ -63,4 +63,27 @@ namespace NipaGameKit.Statuses
             return true;
         }
     }
+
+    public enum ConditionalBool
+    {
+        RequireFalse = 0,
+        RequireTrue = 1,
+        None = 99,
+    }
+
+    public static class CxtCheckerUtil
+    {
+        public static bool IsTrue(bool value, ConditionalBool condition)
+        {
+            return condition == ConditionalBool.None
+                   || (condition == ConditionalBool.RequireTrue && value)
+                   || (condition == ConditionalBool.RequireFalse && value == false);
+        }
+
+        public static bool IsTrue(int value, int condition)
+        {
+            return condition < 0
+                   || value == condition;
+        }
+    }
 }
