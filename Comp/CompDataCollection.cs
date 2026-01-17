@@ -174,7 +174,7 @@ namespace NipaGameKit
         /// <summary>
         /// すべてのデータを取得（読み取り専用）
         /// </summary>
-        public static TData[] GetAllData()
+        public static TData[] GetAllDataAsCopied()
         {
             var result = new TData[_count];
             Array.Copy(_dataArray, result, _count);

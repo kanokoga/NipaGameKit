@@ -60,7 +60,7 @@ namespace NipaGameKit.Statuses.Samples
     {
         private void Start()
         {
-            var unitSpeedModify = new Modifier<SampleContext>
+            var sunnyUnitSpeedUp = new Modifier<SampleContext>
             (ModifierType.Multiplicative, 0.2f,
                 new AndChecker<SampleContext>(
                     new WeatherCxtChecker(WeatherContext.WeatherType.Sunny)
@@ -77,7 +77,7 @@ namespace NipaGameKit.Statuses.Samples
             var speedStat = new Status(speedStatusType, 99, 10f);
 
             var statusModifier = new StatusUpdater();
-            statusModifier.AddModifier(speedStatusType, unitSpeedModify);
+            statusModifier.AddModifier(speedStatusType, sunnyUnitSpeedUp);
 
             statusModifier.UpdateStatus(speedStat, sampleContext);
 
