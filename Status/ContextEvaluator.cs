@@ -28,6 +28,39 @@ namespace NipaGameKit.Statuses
         protected abstract float _Evaluate(T context);
     }
 
+    public class AndEvaluator<T> : ContextEvaluatorBase<T> where T : Context
+    {
+        private readonly List<IContextEvaluator> checkers;
+
+        public AndEvaluator(params IContextEvaluator[] checkers)
+        {
+            this.checkers = new List<IContextEvaluator>(checkers);
+            this.EvaluationDescription = string.Join(" and ", this.checkers.Select(c => c.EvaluationDescription));
+        }
+
+        protected override float _Evaluate(T context)
+        {
+            var weight = this.SelfEvaluate(context);
+
+            foreach(var checker in this.checkers)
+            {
+                var cWeight = checker.Evaluate(context);
+                weight *= cWeight;
+                if(CEE.IsValidWeight(weight) == false)
+                {
+                    break;
+                }
+            }
+
+            return weight;
+        }
+
+        protected virtual float SelfEvaluate(T context)
+        {
+            return CEE.WeightBase;
+        }
+    }
+
     /// <summary>
     /// ContextEvaluator Extensions
     /// </summary>
@@ -72,39 +105,6 @@ namespace NipaGameKit.Statuses
         public static float Evaluate(bool value)
         {
             return value ? 1f : 0f;
-        }
-    }
-
-    public class AndEvaluator<T> : ContextEvaluatorBase<T> where T : Context
-    {
-        private readonly List<IContextEvaluator> checkers;
-
-        public AndEvaluator(params IContextEvaluator[] checkers)
-        {
-            this.checkers = new List<IContextEvaluator>(checkers);
-            this.EvaluationDescription = string.Join(" and ", this.checkers.Select(c => c.EvaluationDescription));
-        }
-
-        protected override float _Evaluate(T context)
-        {
-            var weight = this.SelfEvaluate(context);
-
-            foreach(var checker in this.checkers)
-            {
-                var cWeight = checker.Evaluate(context);
-                weight *= cWeight;
-                if(CEE.IsValidWeight(weight) == false)
-                {
-                    break;
-                }
-            }
-
-            return weight;
-        }
-
-        protected virtual float SelfEvaluate(T context)
-        {
-            return CEE.WeightBase;
         }
     }
 

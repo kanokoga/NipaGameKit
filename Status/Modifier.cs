@@ -44,8 +44,8 @@ namespace NipaGameKit.Statuses
             string conditionDescription,
             bool valueAsPercentage)
         {
-            string signPrefix = value >= 0 ? "+" : "-";
-            string conditionInfo = $"({conditionDescription})";
+            var signPrefix = value >= 0 ? "+" : "-";
+            var conditionInfo = $"({conditionDescription})";
 
             switch(type)
             {
