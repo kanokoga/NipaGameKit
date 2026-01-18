@@ -23,19 +23,25 @@ namespace NipaGameKit.Statuses
             {
                 status.Reset();
                 var addValue = 0f;
+                var addMulValue = 1f;
                 var mulValue = 1f;
 
                 foreach(var modifier in modifiers)
                 {
-                    if(modifier.IsValid(context))
+                    var weight = modifier.Evaluate(context);
+                    if(CEE.IsValidWeight(weight))
                     {
+                        var v = modifier.Value * weight;
                         switch(modifier.Type)
                         {
                             case ModifierType.Additive:
-                                addValue += modifier.Value;
+                                addValue += v;
+                                break;
+                            case ModifierType.AddictiveMultiplication:
+                                addMulValue += v;
                                 break;
                             case ModifierType.Multiplicative:
-                                mulValue += modifier.Value;
+                                mulValue *= v + 1f;
                                 break;
                         }
 
@@ -44,7 +50,7 @@ namespace NipaGameKit.Statuses
                 }
 
                 var newValue = status.BaseValue;
-                newValue = (newValue + addValue) * mulValue;
+                newValue = (newValue + addValue) * addMulValue * mulValue;
                 status.SetValue(newValue);
             }
         }

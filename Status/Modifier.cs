@@ -1,4 +1,5 @@
 using System;
+using UnityEngine;
 
 namespace NipaGameKit.Statuses
 {
@@ -7,7 +8,7 @@ namespace NipaGameKit.Statuses
         ModifierType Type { get; }
         float Value { get; }
 
-        bool IsValid(Context context);
+        float Evaluate(Context context);
 
         string GetModifyInfo();
     }
@@ -15,7 +16,8 @@ namespace NipaGameKit.Statuses
     public enum ModifierType
     {
         Additive,
-        Multiplicative
+        AddictiveMultiplication,
+        Multiplicative,
     }
 
     public class Modifier<T> : IModifier where T : Context
@@ -23,41 +25,53 @@ namespace NipaGameKit.Statuses
         public ModifierType Type { get; }
         public float Value { get; }
         public string ModifyInfo;
-        private ContextCheckerBase<T> contextChecker;
+        private ContextEvaluatorBase<T> contextEvaluator;
 
-        public Modifier(ModifierType type, float value, ContextCheckerBase<T> contextChecker)
+        public Modifier(ModifierType type, float value, ContextEvaluatorBase<T> contextEvaluator,
+            bool valueAsPercentage = false)
         {
             this.Type = type;
             this.Value = value;
-            this.contextChecker = contextChecker;
-            this.ModifyInfo = GenerateModifyInfo(type, value, contextChecker.ConditionDescription);
+            this.contextEvaluator = contextEvaluator;
+            this.ModifyInfo = GenerateModifyInfo(type,
+                value,
+                contextEvaluator.EvaluationDescription,
+                valueAsPercentage);
         }
 
-        private static string GenerateModifyInfo(ModifierType type, float value, string conditionDescription)
+        private static string GenerateModifyInfo(ModifierType type,
+            float value,
+            string conditionDescription,
+            bool valueAsPercentage)
         {
-            string signPrefix = value >= 0 ? "+" : "";
+            string signPrefix = value >= 0 ? "+" : "-";
             string conditionInfo = $"({conditionDescription})";
 
             switch(type)
             {
                 case ModifierType.Additive:
-                    return $"{signPrefix}{value:0.#}{conditionInfo}";
+                    return valueAsPercentage == false
+                        ? $"{signPrefix}{value:0.#}{conditionInfo}"
+                        : $"{signPrefix}{Math.Abs(value) * 100f:0.#}%{conditionInfo}";
+                case ModifierType.AddictiveMultiplication:
+                    var percentageValue = Mathf.Abs(value * 100f);
+                    return $"{signPrefix}x{percentageValue:0.#}%{conditionInfo}";
                 case ModifierType.Multiplicative:
-                    float percentageValue = value * 100f;
-                    return $"{signPrefix}{percentageValue:0.#}%{conditionInfo}";
+                    var percentageValue2 = (value + 1f) * 100f;
+                    return $"x{percentageValue2:0.#}%{conditionInfo}";
                 default:
                     throw new ArgumentOutOfRangeException(nameof(type), type, "Unsupported modifier type");
             }
         }
 
-        public bool IsValid(Context context)
+        public float Evaluate(Context context)
         {
             if(context is T specificContext)
             {
-                return this.contextChecker.IsValid(specificContext);
+                return this.contextEvaluator.Evaluate(specificContext);
             }
 
-            return false;
+            return 0f;
         }
 
         public string GetModifyInfo()

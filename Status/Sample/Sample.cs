@@ -41,18 +41,18 @@ namespace NipaGameKit.Statuses.Samples
         }
     }
 
-    public class WeatherCxtChecker : ContextCheckerBase<WeatherContext>
+    public class WeatherCxtEvaluator : ContextEvaluatorBase<WeatherContext>
     {
         private WeatherContext.WeatherType requiredWeather;
 
-        public WeatherCxtChecker(WeatherContext.WeatherType weather)
+        public WeatherCxtEvaluator(WeatherContext.WeatherType weather)
         {
             this.requiredWeather = weather;
         }
 
-        protected override bool _IsValid(WeatherContext context)
+        protected override float _Evaluate(WeatherContext context)
         {
-            return context.CurrentWeather == this.requiredWeather;
+            return CEE.Evaluate(context.CurrentWeather == this.requiredWeather);
         }
     }
 
@@ -61,9 +61,9 @@ namespace NipaGameKit.Statuses.Samples
         private void Start()
         {
             var sunnyUnitSpeedUp = new Modifier<SampleContext>
-            (ModifierType.Multiplicative, 0.2f,
-                new AndChecker<SampleContext>(
-                    new WeatherCxtChecker(WeatherContext.WeatherType.Sunny)
+            (ModifierType.AddictiveMultiplication, 0.2f,
+                new AndEvaluator<SampleContext>(
+                    new WeatherCxtEvaluator(WeatherContext.WeatherType.Sunny)
                         .SetDescriptionNew("I like sunny weather")
                 ));
 
