@@ -51,6 +51,11 @@ namespace NipaGameKit.Statuses
             this.Value = newValue;
         }
 
+        public void SetBaseValue(float newBaseValue)
+        {
+            this.BaseValue = newBaseValue;
+        }
+
         public void SetType(string newType)
         {
             this.Type = newType;
