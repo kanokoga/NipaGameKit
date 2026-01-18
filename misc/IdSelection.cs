@@ -39,7 +39,7 @@ namespace NipaGameKit
         public static bool HasSelection()
             => SelectedId != InvalidId;
 
-        public static bool IsMouseOvered()
+        public static bool HasMouseOvered()
             => MouseOveredId != InvalidId;
 
         public static void SetInteractable(bool interactable)
