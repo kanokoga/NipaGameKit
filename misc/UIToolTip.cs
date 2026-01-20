@@ -7,13 +7,18 @@ namespace NipaGameKit
     public class UIToolTip : MonoBehaviour
     {
         private MouseOnUI mouseOnUI;
-        [SerializeField] private string tooltipText;
+        [SerializeField, TextArea] private string tooltipText;
 
         private void Awake()
         {
             this.mouseOnUI = this.GetComponent<MouseOnUI>();
             this.mouseOnUI.OnMouseAction += (a) =>
             {
+                if(this.tooltipText.Length == 0)
+                {
+                    return;
+                }
+
                 if(a == MouseActionType.MouseEnter)
                 {
                     Tooltip.Instance.SetText(this.tooltipText);

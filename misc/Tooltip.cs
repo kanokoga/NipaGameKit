@@ -80,7 +80,45 @@ namespace NipaGameKit
             }
 
             var cursorPos = Input.mousePosition;
-            this.rectTransform.position = cursorPos + this.offset;
+            // カーソル位置にオフセットを加えた位置を初期位置とする
+            var targetPos = cursorPos + this.offset;
+
+            // 画面サイズを取得
+            var screenWidth = Screen.width;
+            var screenHeight = Screen.height;
+
+            // Tooltipのサイズを取得
+            var tooltipSize = this.windowRectTransform.sizeDelta;
+
+            // RectTransformのpivotを考慮して左上・右下座標を計算
+            var pivot = this.rectTransform.pivot;
+            var left = targetPos.x - tooltipSize.x * pivot.x;
+            var right = targetPos.x + tooltipSize.x * (1 - pivot.x);
+            var bottom = targetPos.y - tooltipSize.y * pivot.y;
+            var top = targetPos.y + tooltipSize.y * (1 - pivot.y);
+
+            // 画面内に収まるようにオフセットを調整
+            if (left < 0)
+            {
+                targetPos.x += -left;
+            }
+
+            if (right > screenWidth)
+            {
+                targetPos.x -= (right - screenWidth);
+            }
+
+            if (bottom < 0)
+            {
+                targetPos.y += -bottom;
+            }
+
+            if (top > screenHeight)
+            {
+                targetPos.y -= (top - screenHeight);
+            }
+
+            this.rectTransform.position = targetPos;
             this.loadingRectTransform.position = cursorPos + this.loadingOffset;
         }
 
