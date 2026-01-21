@@ -42,7 +42,7 @@ namespace NipaGameKit
         /// <summary>
         /// データを追加（O(1)）
         /// </summary>
-        public static void Add(int monoId, TData data)
+        public static void Add(int entityId, TData data)
         {
             // 容量チェック
             if (_count >= _capacity)
@@ -52,10 +52,10 @@ namespace NipaGameKit
 
             var index = _count;
             _dataArray[index] = data;
-            _dataArray[index].EntityId = monoId;
+            _dataArray[index].EntityId = entityId;
             _dataArray[index].IsActive = true;
 
-            _monoIdToIndex[monoId] = index;
+            _monoIdToIndex[entityId] = index;
             _count++;
 
             // アクティブリストに追加
@@ -66,21 +66,21 @@ namespace NipaGameKit
             _activeIndices[_activeCount] = index;
             _activeCount++;
 
-            OnDataAdded.Invoke(monoId);
+            OnDataAdded.Invoke(entityId);
         }
 
         /// <summary>
         /// データを削除（O(1) - 最後の要素とスワップ）
         /// </summary>
-        public static void Remove(int monoId)
+        public static void Remove(int entityId)
         {
-            var index = _monoIdToIndex[monoId];
+            var index = _monoIdToIndex[entityId];
             if (index < 0 || index >= _count)
             {
                 return;
             }
 
-            OnDataRemoving.Invoke(monoId);
+            OnDataRemoving.Invoke(entityId);
 
             // 最後の要素とスワップして削除をO(1)に
             var lastIndex = _count - 1;
@@ -101,7 +101,7 @@ namespace NipaGameKit
                 }
             }
 
-            _monoIdToIndex[monoId] = -1;
+            _monoIdToIndex[entityId] = -1;
             _count--;
 
             // アクティブリストから削除
@@ -115,7 +115,7 @@ namespace NipaGameKit
                 }
             }
 
-            OnDataRemoved.Invoke(monoId);
+            OnDataRemoved.Invoke(entityId);
         }
 
         /// <summary>

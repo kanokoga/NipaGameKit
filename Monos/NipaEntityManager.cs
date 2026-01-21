@@ -23,6 +23,13 @@ namespace NipaGameKit
             this.activeEntityIds.Add(nipaEntity.EntityId);
         }
 
+        public void SetEntityActive(int entityId)
+        {
+            this.OnMonoIsPreReady.Invoke(entityId);
+            this.OnMonoIsReady.Invoke(entityId);
+            this.activeEntityIds.Add(entityId);
+        }
+
         public void SetEntityDead(NipaEntity nipaEntity)
         {
             this.activeEntityIds.Remove(nipaEntity.EntityId);

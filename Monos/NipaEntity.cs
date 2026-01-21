@@ -12,18 +12,15 @@ namespace NipaGameKit
     /// </summary>
     public class NipaEntity : MonoBehaviour
     {
-        private static int GlobalMonoId = 0;
         public int EntityId { get; private set; }
         private MonoBehaviour[] comps;
 
         private void Awake()
         {
-            this.EntityId = GlobalMonoId;
+            this.EntityId = EntityIdService.GetNextEntityId();
             #if UNITY_EDITOR
             this.gameObject.name += $"_{this.EntityId}";
             #endif
-
-            GlobalMonoId++;
 
             // すべてのCompを取得して初期化
             // Comp<T>を継承しているコンポーネントを検出
