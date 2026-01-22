@@ -4,12 +4,17 @@ using Unity.VisualScripting;
 
 namespace NipaGameKit
 {
+    public static class IdSelectionParam
+    {
+        public const int InvalidId = -1;
+    }
+
+
     public class IdSelection<T>
     {
-
         public static int MouseOveredId { get; private set; } = -1;
         public static int SelectedId { get; private set; } = -1;
-        private const int InvalidId = -1;
+        private static int InvalidId => IdSelectionParam.InvalidId;
 
         public static event Action OnMouseOverIdChanged = delegate { };
         public static event Action OnSelectedIdChanged = delegate { };
