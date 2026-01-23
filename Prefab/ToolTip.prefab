@@ -52,12 +52,10 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::Kasespatzle.Presentations.UIs.Tooltip
   loadDelay: 0.5
   loadDuration: 0.75
-  tooltipText: {fileID: 383493096267466667}
+  tooltipText: {fileID: 3726318835018368663}
   offset: {x: 10, y: 0, z: 0}
   loadingOffset: {x: 20, y: -20, z: 0}
   rectTransform: {fileID: 8428042346607820371}
-  windowRectTransform: {fileID: 4285796509331043367}
-  canvasGroup: {fileID: 305025517216721041}
   loadingRectTransform: {fileID: 3514396615100880821}
   loadingImage: {fileID: 3023202202584168726}
 --- !u!1 &2610856479595495653
@@ -93,7 +91,7 @@ RectTransform:
   m_Father: {fileID: 4285796509331043367}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0}
-  m_AnchorMax: {x: 1, y: 1}
+  m_AnchorMax: {x: 0, y: 0}
   m_AnchoredPosition: {x: 0, y: 0}
   m_SizeDelta: {x: -10, y: -10}
   m_Pivot: {x: 0.5, y: 0.5}
@@ -208,7 +206,9 @@ GameObject:
   - component: {fileID: 4285796509331043367}
   - component: {fileID: 370155867674059853}
   - component: {fileID: 469613992322765707}
-  - component: {fileID: 305025517216721041}
+  - component: {fileID: 8827575664849854748}
+  - component: {fileID: 4033960435954309399}
+  - component: {fileID: 3726318835018368663}
   m_Layer: 5
   m_Name: ToolTipWindow
   m_TagString: Untagged
@@ -274,18 +274,59 @@ MonoBehaviour:
   m_FillOrigin: 0
   m_UseSpriteMesh: 0
   m_PixelsPerUnitMultiplier: 1
---- !u!225 &305025517216721041
-CanvasGroup:
+--- !u!114 &8827575664849854748
+MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 6138618753553534312}
   m_Enabled: 1
-  m_Alpha: 1
-  m_Interactable: 1
-  m_BlocksRaycasts: 1
-  m_IgnoreParentGroups: 0
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 59f8146938fff824cb5fd77236b75775, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: UnityEngine.UI::UnityEngine.UI.VerticalLayoutGroup
+  m_Padding:
+    m_Left: 0
+    m_Right: 0
+    m_Top: 0
+    m_Bottom: 0
+  m_ChildAlignment: 0
+  m_Spacing: 0
+  m_ChildForceExpandWidth: 1
+  m_ChildForceExpandHeight: 1
+  m_ChildControlWidth: 0
+  m_ChildControlHeight: 0
+  m_ChildScaleWidth: 0
+  m_ChildScaleHeight: 0
+  m_ReverseArrangement: 0
+--- !u!114 &4033960435954309399
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6138618753553534312}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 3245ec927659c4140ac4f8d17403cc18, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: UnityEngine.UI::UnityEngine.UI.ContentSizeFitter
+  m_HorizontalFit: 0
+  m_VerticalFit: 0
+--- !u!114 &3726318835018368663
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6138618753553534312}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 38b98172048aabf4191b8185af56bb17, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::NipaUIs.TextWithBgUI
+  padding: 5
 --- !u!1 &6941888736318100681
 GameObject:
   m_ObjectHideFlags: 0
