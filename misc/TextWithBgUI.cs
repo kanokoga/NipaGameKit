@@ -10,9 +10,12 @@ namespace NipaGameKit
     public class TextWithBgUI : MonoBehaviour
     {
         public RectTransform BackgroundRect => this.rectTransform;
+        public Image BackgroundImage => this.backgroundImage;
+        public TMP_Text TextComponent => this.textComp;
 
         [SerializeField] private int padding = 5;
         private RectTransform rectTransform;
+        private Image backgroundImage;
         private TMP_Text textComp;
 
 
@@ -26,6 +29,7 @@ namespace NipaGameKit
         {
             this.textComp = this.GetComponentInChildren<TMP_Text>();
             this.rectTransform = this.GetComponent<RectTransform>();
+            this.backgroundImage = this.GetComponentInChildren<Image>();
             var verticalLayoutGroup = this.GetComponent<VerticalLayoutGroup>();
             verticalLayoutGroup.childControlHeight = true;
             verticalLayoutGroup.childControlWidth = true;
