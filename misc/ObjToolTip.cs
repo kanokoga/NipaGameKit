@@ -6,8 +6,9 @@ namespace NipaGameKit
     [RequireComponent(typeof(MouseOnObject))]
     public class ObjToolTip : MonoBehaviour
     {
+        public string tooltipText;
         private MouseOnObject mouseOnUI;
-        [SerializeField] private string tooltipText;
+
 
         private void Awake()
         {
