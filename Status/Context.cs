@@ -8,7 +8,8 @@ namespace NipaGameKit.Statuses
     public class Context
     {
         // 型ごとのメンバー情報をキャッシュ
-        private static readonly Dictionary<Type, CachedMemberInfo> MemberCache = new Dictionary<Type, CachedMemberInfo>();
+        private static readonly Dictionary<Type, CachedMemberInfo> MemberCache =
+            new Dictionary<Type, CachedMemberInfo>();
 
         private class CachedMemberInfo
         {
@@ -20,7 +21,7 @@ namespace NipaGameKit.Statuses
         public T GetContext<T>() where T : Context
         {
             // 1. 共通処理：自分がその型なら即座に返す
-            if (this is T result)
+            if(this is T result)
             {
                 return result;
             }
@@ -31,29 +32,31 @@ namespace NipaGameKit.Statuses
 
         // 子クラスで「自分の中身」を探すロジックだけを書く
         // リフレクションで自動的にContext型のメンバーを検索する
-        protected virtual T SearchContext<T>() where T : Context
+        protected T SearchContext<T>() where T : Context
         {
             var thisType = this.GetType();
             var targetType = typeof(T);
 
             // キャッシュから取得、なければ作成
-            if (!MemberCache.TryGetValue(thisType, out var cachedInfo))
+            if(!MemberCache.TryGetValue(thisType, out var cachedInfo))
             {
                 cachedInfo = new CachedMemberInfo
                 {
-                    ContextFields = thisType.GetFields(BindingFlags.Public | BindingFlags.NonPublic | BindingFlags.Instance),
-                    ContextProperties = thisType.GetProperties(BindingFlags.Public | BindingFlags.NonPublic | BindingFlags.Instance)
+                    ContextFields =
+                        thisType.GetFields(BindingFlags.Public | BindingFlags.NonPublic | BindingFlags.Instance),
+                    ContextProperties =
+                        thisType.GetProperties(BindingFlags.Public | BindingFlags.NonPublic | BindingFlags.Instance)
                 };
                 MemberCache[thisType] = cachedInfo;
             }
 
             // フィールドを検索
-            foreach (var field in cachedInfo.ContextFields)
+            foreach(var field in cachedInfo.ContextFields)
             {
-                if (targetType.IsAssignableFrom(field.FieldType))
+                if(targetType.IsAssignableFrom(field.FieldType))
                 {
                     var value = field.GetValue(this);
-                    if (value is T result)
+                    if(value is T result)
                     {
                         return result;
                     }
@@ -61,17 +64,23 @@ namespace NipaGameKit.Statuses
             }
 
             // プロパティを検索
-            foreach (var property in cachedInfo.ContextProperties)
+            foreach(var property in cachedInfo.ContextProperties)
             {
-                if (property.CanRead && targetType.IsAssignableFrom(property.PropertyType))
+                if(property.CanRead && targetType.IsAssignableFrom(property.PropertyType))
                 {
                     var value = property.GetValue(this);
-                    if (value is T result)
+                    if(value is T result)
                     {
                         return result;
                     }
                 }
             }
+
+            // error log in editor mode, list all searched members
+#if UNITY_EDITOR
+            Debug.LogError(
+                $"Context: SearchContext<{targetType.Name}> failed to find context from {thisType.Name}. Searched Members: Fields[{string.Join(", ", Array.ConvertAll(cachedInfo.ContextFields, f => f.Name + ":" + f.FieldType.Name))}], Properties[{string.Join(", ", Array.ConvertAll(cachedInfo.ContextProperties, p => p.Name + ":" + p.PropertyType.Name))}]");
+#endif
 
             return null;
         }
