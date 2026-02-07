@@ -1,6 +1,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Runtime.CompilerServices;
+using UnityEngine;
 
 namespace NipaGameKit.Statuses
 {
@@ -21,7 +22,15 @@ namespace NipaGameKit.Statuses
             // 引数の context 自体、あるいはその中身から
             // このチェッカーが期待する型「T」を探し出す
             T target = context.GetContext<T>();
-            //必ず見つかると仮定
+
+            #if UNITY_EDITOR
+            if(target == null)
+            {
+                Debug.LogError( $"ContextEvaluatorBase<{typeof(T).Name}>: Evaluate failed to get context from {context.GetType().Name}. Description: {this.EvaluationDescription}");
+                return 0f;
+            }
+            #endif
+
             return this._Evaluate(target);
         }
 
