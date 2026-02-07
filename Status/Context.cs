@@ -8,7 +8,7 @@ namespace NipaGameKit.Statuses
     public class Context
     {
         // 型ごとのメンバー情報をキャッシュ
-        private static readonly Dictionary<Type, CachedMemberInfo> memberCache = new Dictionary<Type, CachedMemberInfo>();
+        private static readonly Dictionary<Type, CachedMemberInfo> MemberCache = new Dictionary<Type, CachedMemberInfo>();
 
         private class CachedMemberInfo
         {
@@ -37,14 +37,14 @@ namespace NipaGameKit.Statuses
             var targetType = typeof(T);
 
             // キャッシュから取得、なければ作成
-            if (!memberCache.TryGetValue(thisType, out var cachedInfo))
+            if (!MemberCache.TryGetValue(thisType, out var cachedInfo))
             {
                 cachedInfo = new CachedMemberInfo
                 {
                     ContextFields = thisType.GetFields(BindingFlags.Public | BindingFlags.NonPublic | BindingFlags.Instance),
                     ContextProperties = thisType.GetProperties(BindingFlags.Public | BindingFlags.NonPublic | BindingFlags.Instance)
                 };
-                memberCache[thisType] = cachedInfo;
+                MemberCache[thisType] = cachedInfo;
             }
 
             // フィールドを検索
