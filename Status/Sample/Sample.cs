@@ -41,26 +41,6 @@ namespace NipaGameKit.Statuses.Samples
     {
         public TerrainContext terrainContext;
         public WeatherContext weatherContext;
-
-        protected override T SearchContext<T>()
-        {
-            if(this is T result)
-            {
-                return result;
-            }
-
-            if(typeof(T) == typeof(WeatherContext))
-            {
-                return (T)(object)this.weatherContext;
-            }
-
-            if(typeof(T) == typeof(TerrainContext))
-            {
-                return (T)(object)this.terrainContext;
-            }
-
-            return null;
-        }
     }
 
     public class WeatherCxtEvaluator : ContextEvaluatorBase<WeatherContext>
