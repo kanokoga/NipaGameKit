@@ -15,11 +15,11 @@ namespace NipaGameKit.Statuses
             }
 
             // 2. 個別処理：自分の中に含まれるコンテキストを検索する
-            return this.SearchComponent<T>();
+            return this.SearchContext<T>();
         }
 
         // 子クラスで「自分の中身」を探すロジックだけを書く
-        protected virtual T SearchComponent<T>() where T : Context
+        protected virtual T SearchContext<T>() where T : Context
         {
             return null; // デフォルトでは何も持っていない
         }
