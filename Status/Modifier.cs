@@ -20,14 +20,14 @@ namespace NipaGameKit.Statuses
         Multiplicative,
     }
 
-    public class Modifier<T> : IModifier where T : Context
+    public class Modifier : IModifier
     {
         public ModifierType Type { get; }
         public float Value { get; }
         public string ModifyInfo;
-        private ContextEvaluatorBase<T> contextEvaluator;
+        private IContextEvaluator contextEvaluator;
 
-        public Modifier(ModifierType type, float value, ContextEvaluatorBase<T> contextEvaluator,
+        public Modifier(ModifierType type, float value, IContextEvaluator contextEvaluator,
             bool valueAsPercentage = false)
         {
             this.Type = type;
@@ -66,12 +66,7 @@ namespace NipaGameKit.Statuses
 
         public float Evaluate(Context context)
         {
-            if(context is T specificContext)
-            {
-                return this.contextEvaluator.Evaluate(specificContext);
-            }
-
-            return 0f;
+            return this.contextEvaluator.Evaluate(context);
         }
 
         public string GetModifyInfo()

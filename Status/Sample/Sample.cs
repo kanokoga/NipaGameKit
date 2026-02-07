@@ -102,34 +102,31 @@ namespace NipaGameKit.Statuses.Samples
 
         private void Start()
         {
-
-            var rainySpeedDown = new Modifier<WeatherContext>
+            var rainySpeedDown = new Modifier
             (ModifierType.AddictiveMultiplication, -0.15f,
                 new WeatherCxtEvaluator(WeatherContext.WeatherType.Rainy)
                     .SetDescriptionNew("Rainy weather slows you down"));
-            var snowySpeedDown = new Modifier<WeatherContext>
+            var snowySpeedDown = new Modifier
             (ModifierType.AddictiveMultiplication, -0.25f,
                 new WeatherCxtEvaluator(WeatherContext.WeatherType.Snowy)
                     .SetDescriptionNew("Snowy weather slows you down even more"));
 
-            var sunnyAndPlainSpeedup = new Modifier<EnvironmentContext>
+            var forestSpeedDown = new Modifier
+            (ModifierType.AddictiveMultiplication, -0.1f,
+                new TerrainCxtEvaluator(TerrainContext.TerrainType.Forest)
+                    .SetDescriptionNew("Forests are hard to walk"));
+
+            var mountainSpeedDown = new Modifier
+            (ModifierType.AddictiveMultiplication, -0.2f,
+                new TerrainCxtEvaluator(TerrainContext.TerrainType.Mountain)
+                    .SetDescriptionNew("Mountains are hard to walk"));
+
+            var sunnyAndPlainSpeedup = new Modifier
             (ModifierType.AddictiveMultiplication, 0.5f,
                 new AndEvaluator<EnvironmentContext>(
                     new WeatherCxtEvaluator(WeatherContext.WeatherType.Sunny),
                     new TerrainCxtEvaluator(TerrainContext.TerrainType.Plains)
                 ).SetDescriptionNew("Sunny weather and plains, the best condition to move"));
-
-            var forestSpeedDown = new Modifier<EnvironmentContext>
-            (ModifierType.AddictiveMultiplication, -0.1f,
-                new AndEvaluator<EnvironmentContext>(
-                new TerrainCxtEvaluator(TerrainContext.TerrainType.Forest)
-                    .SetDescriptionNew("Forests are hard to walk")));
-
-            var mountainSpeedDown = new Modifier<EnvironmentContext>
-            (ModifierType.AddictiveMultiplication, -0.2f,
-                new AndEvaluator<EnvironmentContext>(
-                new TerrainCxtEvaluator(TerrainContext.TerrainType.Mountain)
-                    .SetDescriptionNew("Mountains are hard to walk")));
 
             var environmentContext = new EnvironmentContext
             {
@@ -142,9 +139,9 @@ namespace NipaGameKit.Statuses.Samples
 
             this.statusModifier.AddModifier(speedStatusType, rainySpeedDown);
             this.statusModifier.AddModifier(speedStatusType, snowySpeedDown);
-            this.statusModifier.AddModifier(speedStatusType, sunnyAndPlainSpeedup);
             this.statusModifier.AddModifier(speedStatusType, forestSpeedDown);
             this.statusModifier.AddModifier(speedStatusType, mountainSpeedDown);
+            this.statusModifier.AddModifier(speedStatusType, sunnyAndPlainSpeedup);
             this.statusModifier.UpdateStatus(speedStat, environmentContext);
             Debug.Log(speedStat);
             this.log = speedStat.ToString();
@@ -203,13 +200,12 @@ namespace NipaGameKit.Statuses.Samples
                 this.statusModifier.UpdateStatus(speedStat, environmentContext);
                 Debug.Log(speedStat);
                 this.log = speedStat.ToString();
-
-
             }
+
             // Display the log
             GUILayout.Label("Status Update Result:");
             GUILayout.TextArea(this.log, GUILayout.Height(200));
-            
+
             GUILayout.EndArea();
         }
     }
