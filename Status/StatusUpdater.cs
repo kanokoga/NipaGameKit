@@ -5,13 +5,13 @@ namespace NipaGameKit.Statuses
 {
     public class StatusUpdater
     {
-        private Dictionary<string, List<IModifier>> modifiersByStatusType = new Dictionary<string, List<IModifier>>();
+        private Dictionary<string, List<Modifier>> modifiersByStatusType = new Dictionary<string, List<Modifier>>();
 
-        public void AddModifier(string statusType, IModifier modifier)
+        public void AddModifier(string statusType, Modifier modifier)
         {
             if(!this.modifiersByStatusType.ContainsKey(statusType))
             {
-                this.modifiersByStatusType[statusType] = new List<IModifier>();
+                this.modifiersByStatusType[statusType] = new List<Modifier>();
             }
 
             this.modifiersByStatusType[statusType].Add(modifier);

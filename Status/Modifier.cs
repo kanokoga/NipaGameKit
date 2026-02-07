@@ -3,16 +3,6 @@ using UnityEngine;
 
 namespace NipaGameKit.Statuses
 {
-    public interface IModifier
-    {
-        ModifierType Type { get; }
-        float Value { get; }
-
-        float Evaluate(Context context);
-
-        string GetModifyInfo();
-    }
-
     public enum ModifierType
     {
         Additive,
@@ -20,7 +10,7 @@ namespace NipaGameKit.Statuses
         Multiplicative,
     }
 
-    public class Modifier : IModifier
+    public class Modifier
     {
         public ModifierType Type { get; }
         public float Value { get; }
