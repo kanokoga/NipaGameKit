@@ -98,9 +98,20 @@ namespace NipaGameKit.Statuses.Samples
         public WeatherContext.WeatherType weatherType = WeatherContext.WeatherType.Sunny;
         public TerrainContext.TerrainType terrainType = TerrainContext.TerrainType.Plains;
         private StatusUpdater statusModifier = new StatusUpdater();
+        private string log = "";
 
         private void Start()
         {
+
+            var rainySpeedDown = new Modifier<WeatherContext>
+            (ModifierType.AddictiveMultiplication, -0.15f,
+                new WeatherCxtEvaluator(WeatherContext.WeatherType.Rainy)
+                    .SetDescriptionNew("Rainy weather slows you down"));
+            var snowySpeedDown = new Modifier<WeatherContext>
+            (ModifierType.AddictiveMultiplication, -0.25f,
+                new WeatherCxtEvaluator(WeatherContext.WeatherType.Snowy)
+                    .SetDescriptionNew("Snowy weather slows you down even more"));
+
             var sunnyAndPlainSpeedup = new Modifier<EnvironmentContext>
             (ModifierType.AddictiveMultiplication, 0.5f,
                 new AndEvaluator<EnvironmentContext>(
@@ -129,17 +140,20 @@ namespace NipaGameKit.Statuses.Samples
             var speedStatusType = "UnitSpeed";
             var speedStat = new Status(speedStatusType, 99, 10f);
 
+            this.statusModifier.AddModifier(speedStatusType, rainySpeedDown);
+            this.statusModifier.AddModifier(speedStatusType, snowySpeedDown);
             this.statusModifier.AddModifier(speedStatusType, sunnyAndPlainSpeedup);
             this.statusModifier.AddModifier(speedStatusType, forestSpeedDown);
             this.statusModifier.AddModifier(speedStatusType, mountainSpeedDown);
             this.statusModifier.UpdateStatus(speedStat, environmentContext);
             Debug.Log(speedStat);
+            this.log = speedStat.ToString();
         }
 
         // onguiwindows to change weather and terrain,then update status
         private void OnGUI()
         {
-            GUILayout.BeginArea(new Rect(10, 10, 200, 500));
+            GUILayout.BeginArea(new Rect(10, 10, 200, 1000));
             GUILayout.Label("Weather:" + this.weatherType.ToString());
             if(GUILayout.Button("Sunny"))
             {
@@ -188,8 +202,14 @@ namespace NipaGameKit.Statuses.Samples
 
                 this.statusModifier.UpdateStatus(speedStat, environmentContext);
                 Debug.Log(speedStat);
-            }
+                this.log = speedStat.ToString();
 
+
+            }
+            // Display the log
+            GUILayout.Label("Status Update Result:");
+            GUILayout.TextArea(this.log, GUILayout.Height(200));
+            
             GUILayout.EndArea();
         }
     }
