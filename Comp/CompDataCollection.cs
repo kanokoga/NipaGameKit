@@ -8,6 +8,7 @@ namespace NipaGameKit
     /// refパラメータ付きデリゲート（ジェネリック型パラメータ用）
     /// </summary>
     public delegate void UpdateDataDelegate<TData>(int monoId, ref TData data) where TData : struct, ICompData;
+    public delegate void UpdateDataDelegateSimple<TData>(ref TData data) where TData : struct, ICompData;
 
     /// <summary>
     /// SoA（Structure of Arrays）構造でデータを保持
@@ -174,10 +175,23 @@ namespace NipaGameKit
             }
         }
 
+        public static void UpdateData(UpdateDataDelegateSimple<TData> updateAction)
+        {
+            // アクティブなインデックスのみをループ（連続メモリアクセス）
+            for(var i = 0; i < _activeCount; i++)
+            {
+                var index = _activeIndices[i];
+                if(index < _count)
+                {
+                    updateAction( ref _dataArray[index]);
+                }
+            }
+        }
+
         /// <summary>
         /// Enumerates only active data for foreach usage.
         /// </summary>
-        public static IEnumerable<TData> GetAllDataReadOnly()
+        public static IEnumerable<TData> EnumerateActiveDataReadOnly()
         {
             for(var i = 0; i < _activeCount; i++)
             {
@@ -187,16 +201,6 @@ namespace NipaGameKit
                     yield return _dataArray[index];
                 }
             }
-        }
-
-        /// <summary>
-        /// すべてのデータを取得（読み取り専用）
-        /// </summary>
-        public static TData[] GetAllDataAsCopied()
-        {
-            var result = new TData[_count];
-            Array.Copy(_dataArray, result, _count);
-            return result;
         }
 
         /// <summary>
