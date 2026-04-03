@@ -1,0 +1,17 @@
+{
+    "name": "NipaGameKit",
+    "rootNamespace": "",
+    "references": [
+        "GUID:ce970b1a06e03bc40b87c0db8acd9203",
+        "GUID:6055be8ebefd69e48b49212b09b47b2f"
+    ],
+    "includePlatforms": [],
+    "excludePlatforms": [],
+    "allowUnsafeCode": false,
+    "overrideReferences": false,
+    "precompiledReferences": [],
+    "autoReferenced": true,
+    "defineConstraints": [],
+    "versionDefines": [],
+    "noEngineReferences": false
+}
