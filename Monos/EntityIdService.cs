@@ -10,7 +10,7 @@ namespace NipaGameKit
         {
             var id = EntityId;
             EntityId++;
-            if(EntityId > int.MaxValue - 1)
+            if(EntityId >= 256 - 1)
             {
                 EntityId = 0;
             }
