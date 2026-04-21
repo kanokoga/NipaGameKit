@@ -12,19 +12,52 @@ namespace NipaGameKit.ECS
 
         public Chunk(int capacity, params Type[] types)
         {
+            if(capacity <= 0)
+            {
+                throw new ArgumentOutOfRangeException(nameof(capacity), "Chunk capacity must be greater than 0.");
+            }
+
+            if(types == null || types.Length == 0)
+            {
+                throw new ArgumentException("Chunk must have at least one component type.", nameof(types));
+            }
+
             this.Capacity = capacity;
             this.Count = 0;
             foreach(var type in types)
             {
+                if(type == null)
+                {
+                    throw new ArgumentException("Component type cannot be null.", nameof(types));
+                }
+
+                if(type.IsValueType == false)
+                {
+                    throw new ArgumentException($"Component type must be struct: {type.FullName}", nameof(types));
+                }
+
+                if(this._componentArrays.ContainsKey(type))
+                {
+                    throw new ArgumentException($"Duplicate component type in chunk: {type.FullName}", nameof(types));
+                }
+
                 // 各コンポーネントの配列を事前確保
                 this._componentArrays[type] = Array.CreateInstance(type, capacity);
             }
         }
 
         // 特定のコンポーネント配列を型安全に取得
-        public T[] GetArray<T>() => (T[])this._componentArrays[typeof(T)];
+        public T[] GetArray<T>() where T : struct
+        {
+            if(this._componentArrays.TryGetValue(typeof(T), out var array) == false)
+            {
+                throw new KeyNotFoundException($"Chunk does not contain component: {typeof(T).FullName}");
+            }
 
-        public bool HasComponent<T>() => this._componentArrays.ContainsKey(typeof(T));
+            return (T[])array;
+        }
+
+        public bool HasComponent<T>() where T : struct => this._componentArrays.ContainsKey(typeof(T));
 
         // エンティティの追加（初期値の設定など）
         public int AddEntity()
