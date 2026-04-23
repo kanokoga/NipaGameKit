@@ -59,6 +59,22 @@ namespace NipaGameKit.ECS
 
         public bool HasComponent<T>() where T : struct => this._componentArrays.ContainsKey(typeof(T));
 
+        public bool TryGetIndexById<T>(int targetId, out int index) where T : struct, IId
+        {
+            var array = this.GetArray<T>();
+            for(var i = 0; i < this.Count; i++)
+            {
+                if(array[i].Id == targetId)
+                {
+                    index = i;
+                    return true;
+                }
+            }
+
+            index = -1;
+            return false;
+        }
+
         // エンティティの追加（初期値の設定など）
         public int AddEntity()
         {
