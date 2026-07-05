@@ -1,18 +1,20 @@
 using System;
 using System.Collections.Generic;
+using UnityEngine;
 
 namespace NipaGameKit.ECS
 {
-    public abstract class ComponentSystem
+    public abstract class ComponentSystemMono : MonoBehaviour
     {
-        // このシステムが実行対象とするChunkのリスト
         protected readonly List<Chunk> TargetChunks = new List<Chunk>();
         private readonly HashSet<Chunk> _registeredChunks = new HashSet<Chunk>();
 
-        // 実行（サブクラスでロジックを記述）
         public abstract void UpdateSystem(float deltaTime);
 
-        // 新しいChunkが生成された時にシステムに登録する
+        public virtual void Init()
+        {
+        }
+
         public void RegisterChunk(Chunk chunk)
         {
             if(chunk == null)
@@ -25,14 +27,13 @@ namespace NipaGameKit.ECS
                 return;
             }
 
-            if(Filter(chunk))
+            if(this.Filter(chunk))
             {
                 this.TargetChunks.Add(chunk);
                 this._registeredChunks.Add(chunk);
             }
         }
 
-        // このシステムが必要なコンポーネントを持っているか判定
         protected abstract bool Filter(Chunk chunk);
     }
 }

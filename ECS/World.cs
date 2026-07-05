@@ -1,14 +1,19 @@
 using System;
 using System.Collections.Generic;
+using Unity.Profiling;
 
 namespace NipaGameKit.ECS
 {
     public class World
     {
         private readonly List<Chunk> _chunks = new List<Chunk>();
-        private readonly List<ComponentSystem> _systems = new List<ComponentSystem>();
+        private readonly List<ComponentSystemMono> _systems = new List<ComponentSystemMono>();
+        private readonly Dictionary<ComponentSystemMono, ProfilerMarker> _systemMarkers =
+            new Dictionary<ComponentSystemMono, ProfilerMarker>();
 
-        public void AddSystem(ComponentSystem system)
+        private static readonly ProfilerMarker UpdateMarker = new ProfilerMarker("ECS.World.Update");
+
+        public void AddSystem(ComponentSystemMono system)
         {
             if(system == null)
             {
@@ -16,6 +21,7 @@ namespace NipaGameKit.ECS
             }
 
             this._systems.Add(system);
+            this._systemMarkers[system] = new ProfilerMarker($"ECS.{system.GetType().Name}");
             foreach(var chunk in this._chunks)
             {
                 system.RegisterChunk(chunk);
@@ -37,13 +43,19 @@ namespace NipaGameKit.ECS
 
         public void Update(float deltaTime)
         {
+            UpdateMarker.Begin();
             foreach(var system in this._systems)
             {
-                system.Update(deltaTime);
+                using(this._systemMarkers[system].Auto())
+                {
+                    system.UpdateSystem(deltaTime);
+                }
             }
+
+            UpdateMarker.End();
         }
 
         public IReadOnlyList<Chunk> Chunks => this._chunks;
-        public IReadOnlyList<ComponentSystem> Systems => this._systems;
+        public IReadOnlyList<ComponentSystemMono> Systems => this._systems;
     }
 }
